@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">IGClone</string>
+
+    <string-array name="planets_array">
+        <item>Gallery</item>
+        <item>Photos</item>
+        <item>Videos</item>
+        <item>Instagram</item>
+        <item>Layout</item>
+        <item>Other...</item>
+        <item>Download</item>
+        <item>IMO images</item>
+    </string-array>
 </resources>

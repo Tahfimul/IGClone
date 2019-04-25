@@ -1,4 +1,4 @@
-package com.example.igclone.Home;
+package com.example.igclone.Home.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

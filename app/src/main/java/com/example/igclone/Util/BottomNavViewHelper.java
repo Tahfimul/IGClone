@@ -1,12 +1,19 @@
 package com.example.igclone.Util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.example.igclone.Discovery.DiscoveryActivity;
@@ -29,7 +36,7 @@ public class BottomNavViewHelper {
         menuItem.setChecked(true);
     }
 
-    public static void enableBottomNav(final Context context, BottomNavigationView view)
+    public static void enableBottomNav(final Context context, BottomNavigationView view, final Activity currentActivity)
     {
         view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -46,7 +53,13 @@ public class BottomNavViewHelper {
                         break;
                     case R.id.new_post:
                         Intent newPost = new Intent(context, NewPostActivity.class);
-                        context.startActivity(newPost);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                context.startActivity(newPost,
+                                                ActivityOptions.makeSceneTransitionAnimation(currentActivity).toBundle());
+                            }
+                        }
+
                         break;
                     case R.id.interactions:
                         Intent interactions = new Intent(context, InteractionsActivity.class);

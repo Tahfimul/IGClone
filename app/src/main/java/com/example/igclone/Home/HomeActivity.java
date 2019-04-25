@@ -4,20 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-import com.example.igclone.Util.BottomNavViewHelper;
+import com.example.igclone.Home.Adapters.HomePagerAdapter;
 import com.example.igclone.R;
 
 public class HomeActivity extends AppCompatActivity {
@@ -49,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Our handler for received Intents. This will be called whenever an Intent
-    // with an action named "custom-event-name" is broadcasted.
+    // with an action named "switch" is broadcasted.
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -61,7 +52,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        if(viewPager.getCurrentItem()!=1)
+            viewPager.setCurrentItem(1);
+        else
+            super.onBackPressed();
     }
 }

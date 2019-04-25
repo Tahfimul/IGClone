@@ -1,11 +1,12 @@
-package com.example.igclone.Home;
+package com.example.igclone.Home.Adapters;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.View;
+import com.example.igclone.Home.Fragments.CameraFragment;
+import com.example.igclone.Home.Fragments.ChatFragment;
+import com.example.igclone.Home.Fragments.FeedFragment;
 
 public class HomePagerAdapter extends FragmentStatePagerAdapter {
 

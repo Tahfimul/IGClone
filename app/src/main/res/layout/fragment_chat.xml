@@ -2,9 +2,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:background="@android:color/white"
+            android:elevation="2dp">
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:src="@drawable/ic_back"
+                    android:id="@+id/back_btn"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/switcher"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:layout_marginStart="20dp">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="username"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:id="@+id/username"/>
+
+            <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_arrow"
+                    android:layout_marginStart="5dp"
+                    android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="horizontal"
+                android:layout_marginEnd="10dp">
+
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_videocall"
+                    android:background="@android:color/white"
+                    android:id="@+id/stories_archive"
+                    android:layout_marginEnd="10dp"/>
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_new_message"
+                    android:background="@android:color/white"/>
+        </LinearLayout>
+
+
+    </android.support.v7.widget.Toolbar>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
             android:text="Chat Fragment"
             android:layout_centerHorizontal="true"
             android:id="@+id/headline"
@@ -15,4 +80,38 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/headline"
             android:id="@+id/text1"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/shadow_bottom_nav"
+            android:layout_above="@id/CameraBtn"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/CameraBtn"
+            android:padding="10dp">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_camera_blue"
+                android:layout_toLeftOf="@id/cameraTxt"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/cameraIcn"
+                android:layout_centerVertical="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Camera"
+                android:textSize="15sp"
+                android:textColor="@color/colorIGBlue"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/cameraTxt"/>
+
+    </RelativeLayout>
 </RelativeLayout>

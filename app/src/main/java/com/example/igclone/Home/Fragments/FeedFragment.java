@@ -1,4 +1,4 @@
-package com.example.igclone.Home;
+package com.example.igclone.Home.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,7 +72,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener {
 
 
     private void setUpBottomNav() {
-        BottomNavViewHelper.enableBottomNav(getContext(), bottomBav);
+        BottomNavViewHelper.enableBottomNav(getContext(), bottomBav, getActivity());
         BottomNavViewHelper.disableShiftModeAndSetSelected(bottomBav, 0);
     }
 }

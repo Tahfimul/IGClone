@@ -22,7 +22,7 @@ public class DiscoveryActivity extends AppCompatActivity {
     }
 
     private void setUpBottomNav() {
-        BottomNavViewHelper.enableBottomNav(this, bottomNav);
+        BottomNavViewHelper.enableBottomNav(this, bottomNav, this);
         BottomNavViewHelper.disableShiftModeAndSetSelected(bottomNav, 1);
     }
 
