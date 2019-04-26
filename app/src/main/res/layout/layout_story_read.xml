@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="wrap_content"
+                                             android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+    <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/circle_border"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="5dp">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/story_image"/>
+
+
+    </RelativeLayout>
+
+    <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Story Title"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:maxEms="12"
+            android:maxLines="1"
+            android:id="@+id/story_title"/>
+
+</LinearLayout>
