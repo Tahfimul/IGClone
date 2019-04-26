@@ -46,6 +46,7 @@
             android:layout_below="@id/topBar"
             android:id="@+id/post_image"
             android:src="@drawable/nyc"/>
+
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -90,96 +91,105 @@
 
     </RelativeLayout>
 
-    <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_below="@id/interactionsBar"
-            android:background="@drawable/circle_border"
-            android:layout_marginStart="35dp"
-            android:id="@+id/user_3"/>
-
-    <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_below="@id/interactionsBar"
-            android:background="@drawable/circle_border"
-            android:layout_marginStart="20dp"
-            android:id="@+id/user_2"/>
 
 
-    <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_below="@id/interactionsBar"
-            android:background="@drawable/circle_border"
-            android:layout_marginStart="10dp"
-            android:id="@+id/user_1"/>
-
-
-    <TextView
+    <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/user_3"
+            android:layout_height="wrap_content"
             android:layout_below="@id/interactionsBar"
-            android:gravity="center"
-            android:text="Liked by"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="10dp"
-            android:id="@+id/liked_by"/>
+            android:id="@+id/stats_bar">
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/circle_border"
+                android:layout_marginStart="35dp"
+                android:id="@+id/user_3"/>
+
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/circle_border"
+                android:layout_marginStart="20dp"
+                android:id="@+id/user_2"/>
 
 
-    <TextView
+        <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/circle_border"
+                android:layout_marginStart="10dp"
+                android:id="@+id/user_1"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_toRightOf="@id/user_3"
+                android:gravity="center"
+                android:text="Liked by"
+                android:textColor="@android:color/black"
+                android:id="@+id/liked_by"
+                android:layout_marginStart="10dp"/>
+
+    </RelativeLayout>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_toRightOf="@id/stats_bar"
+                android:layout_below="@id/interactionsBar"
+                android:id="@+id/latest_user_ineraction"
+                android:text="@string/app_name"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="2dp"
+                android:textStyle="bold"/>
+
+    <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/liked_by"
+            android:layout_height="wrap_content"
             android:layout_below="@id/interactionsBar"
-            android:id="@+id/latest_user_ineraction"
-            android:text="@string/app_name"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="2dp"
-            android:textStyle="bold"/>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
             android:layout_toRightOf="@id/latest_user_ineraction"
-            android:layout_below="@id/interactionsBar"
-            android:id="@+id/and_txt"
-            android:text="and"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="2dp"/>
+            android:id="@+id/stats_bar2">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/and_txt"
-            android:layout_below="@id/interactionsBar"
-            android:id="@+id/interaction_count"
-            android:text="4"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="2dp"
-            android:textStyle="bold"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:id="@+id/and_txt"
+                android:text="and"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="2dp"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_toRightOf="@id/interaction_count"
-            android:layout_below="@id/interactionsBar"
-            android:id="@+id/others_txt"
-            android:text="others"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="2dp"
-            android:textStyle="bold"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_toRightOf="@id/and_txt"
+                android:id="@+id/interaction_count"
+                android:text="4"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="2dp"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_toRightOf="@id/interaction_count"
+                android:id="@+id/others_txt"
+                android:text="others"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="2dp"
+                android:textStyle="bold"/>
+    </RelativeLayout>
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:layout_below="@id/user_1"
+            android:layout_below="@id/stats_bar"
             android:id="@+id/latest_comment"
             android:text="@string/app_name"
             android:textColor="@android:color/black"
