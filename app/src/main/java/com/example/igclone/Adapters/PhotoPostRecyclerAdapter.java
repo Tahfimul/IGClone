@@ -2,23 +2,29 @@ package com.example.igclone.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
+import android.view.*;
 import android.widget.*;
 import com.example.igclone.DataModel.PhotoPostDataModel;
 import com.example.igclone.Fragments.MoreBtnDiag;
+import com.example.igclone.PosstData.ProfilePhotoFeedData;
 import com.example.igclone.R;
+import com.example.igclone.Util.CommentClickableSpan;
+import com.example.igclone.Util.CommentUserClickableSpan;
+import com.example.igclone.Util.PostUtil;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.igclone.UserProfile.Util.UserProfileNavUtil.getTimeAgo;
 
@@ -26,6 +32,11 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
 
     ArrayList<PhotoPostDataModel> dataset;
     FragmentManager fragmentManager;
+
+    public PhotoPostRecyclerAdapter()
+    {
+
+    }
 
     public PhotoPostRecyclerAdapter(ArrayList<PhotoPostDataModel> dataset, FragmentManager fragmentManager)
     {
@@ -40,6 +51,8 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
         TextView username;
         ImageButton moreBtn;
         ImageView postPhoto;
+        RelativeLayout photoPostContainer;
+        ImageView postPhotoInteractedIcn;
         ImageButton likeBtn;
         ImageButton commentBtn;
         ImageButton shareBtn;
@@ -55,6 +68,7 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
         TextView viewAllComments;
         TextView timeStamp;
         FragmentManager fragmentManager;
+        PhotoPostDataModel data;
 
         public PhotoPostViewHolder(@NonNull View itemView, FragmentManager fragmentManager) {
             super(itemView);
@@ -62,6 +76,8 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
             username = itemView.findViewById(R.id.username);
             moreBtn = itemView.findViewById(R.id.more_btn);
             postPhoto = itemView.findViewById(R.id.post_image);
+            photoPostContainer = itemView.findViewById(R.id.post_image_container);
+            postPhotoInteractedIcn = itemView.findViewById(R.id.ic_interacted_post_photo);
             likeBtn = itemView.findViewById(R.id.like_btn);
             commentBtn = itemView.findViewById(R.id.comment_btn);
             shareBtn = itemView.findViewById(R.id.share_btn);
@@ -81,16 +97,19 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
 
         void bind(PhotoPostDataModel data)
         {
+            this.data = data;
             userIcon.setImageResource(data.getUserIconSrc());
             username.setText(data.getUsername());
             moreBtn.setOnClickListener(this);
             postPhoto.setImageResource(data.getPhotoSrc());
-            postPhoto.setOnClickListener(this);
+//            setPostPhotoDoubleTapListener();
 
             if (data.isLiked())
                 likeBtn.setImageResource(R.drawable.ic_liked);
             else
                 likeBtn.setImageResource(R.drawable.ic_interactions);
+
+            likeBtn.setOnClickListener(this);
 
             commentBtn.setOnClickListener(this);
             shareBtn.setOnClickListener(this);
@@ -120,27 +139,13 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
             String latestCommentText = data.getLatestCommentUsername() + " " +data.getLatestComment();
             SpannableString spannableString = new SpannableString(latestCommentText);
 
-            ClickableSpan latestCommentUserTxt = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    //Go to latest comment user profile
-                    System.out.println("Latest COmment User");
-                    Toast.makeText(itemView.getContext(), "Latest COmment User", Toast.LENGTH_SHORT).show();
-                }
-            };
-            ClickableSpan latestCommentTxt = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    //View all comments
-                    Toast.makeText(itemView.getContext(), "Latest COmment", Toast.LENGTH_SHORT).show();
-                }
-            };
+            int color = itemView.getContext().getResources().getColor(android.R.color.black, null);
 
-            spannableString.setSpan(latestCommentUserTxt, 0, data.getLatestCommentUsername().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, data.getLatestCommentUsername().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(latestCommentTxt, data.getLatestCommentUsername().length()+1, latestCommentText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), data.getLatestCommentUsername().length()+1, latestCommentText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new CommentUserClickableSpan(latestCommentText, color), 0, data.getLatestCommentUsername().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            spannableString.setSpan(new CommentClickableSpan(latestCommentText, color), data.getLatestCommentUsername().length()+1, latestCommentText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
             latestComment.setText(spannableString);
+            latestComment.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         private void setTimestamp(PhotoPostDataModel data)
@@ -159,14 +164,15 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                     moreBtnDiag.show(ft, "ok");
                     break;
                 case R.id.post_image:
+
                     break;
-                case R.id.like_btn:
-                    break;
+
                 case R.id.comment_btn:
                     break;
                 case R.id.share_btn:
                     break;
                 case R.id.bookmark_btn:
+
                     break;
                 case R.id.stats_bar:
                     break;
@@ -178,6 +184,13 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
         }
     }
 
+    public void updateDataset(PhotoPostDataModel data, int pos)
+    {
+        System.out.println(data.getLatestComment());
+        dataset.set(pos, data);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public PhotoPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -187,8 +200,57 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PhotoPostViewHolder photoPostViewHolder, int i) {
-        photoPostViewHolder.bind(dataset.get(i));
+    public void onBindViewHolder(@NonNull final PhotoPostViewHolder photoPostViewHolder, int i) {
+
+        final ProfilePhotoFeedData dataset = new ProfilePhotoFeedData();
+        final PhotoPostDataModel data = this.dataset.get(i);
+        photoPostViewHolder.bind(data);
+
+        photoPostViewHolder.likeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (data.isLiked())
+                {
+                    data.setLiked(false);
+                }
+                else
+                {
+                    data.setLiked(true);
+                }
+                dataset.initData();
+                dataset.updateData(data);
+                notifyDataSetChanged();
+            }
+        });
+
+        photoPostViewHolder.photoPostContainer.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(photoPostViewHolder.itemView.getContext(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+
+                    photoPostViewHolder.postPhotoInteractedIcn.setVisibility(View.VISIBLE);
+                    data.setLiked(true);
+                    notifyDataSetChanged();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            photoPostViewHolder.postPhotoInteractedIcn.setVisibility(View.GONE);
+                        }
+                    }, 1000);
+
+
+                    return super.onDoubleTap(e);
+                }
+            });
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
+
     }
 
     @Override

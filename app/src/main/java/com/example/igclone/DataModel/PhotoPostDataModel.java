@@ -9,6 +9,7 @@ public class PhotoPostDataModel {
     private int user2IconSrc;
     private int user3IconSrc;
     private boolean liked;
+    private boolean bookmarked;
     private String latestUserLike;
     private int userLikeCount;
     private String latestCommentUsername;
@@ -16,7 +17,7 @@ public class PhotoPostDataModel {
     private int commentCount;
     private long timeStamp;
 
-    public PhotoPostDataModel(int userIconSrc, String username, int photoSrc, int user1IconSrc, int user2IconSrc, int user3IconSrc, boolean liked, String latestUserLike, int userLikeCount, String latestCommentUsername, String latestComment, int commentCount, long timeStamp)
+    public PhotoPostDataModel(int userIconSrc, String username, int photoSrc, int user1IconSrc, int user2IconSrc, int user3IconSrc, boolean liked, boolean bookmarked, String latestUserLike, int userLikeCount, String latestCommentUsername, String latestComment, int commentCount, long timeStamp)
     {
         this.userIconSrc = userIconSrc;
         this.username = username;
@@ -25,6 +26,7 @@ public class PhotoPostDataModel {
         this.user2IconSrc = user2IconSrc;
         this.user3IconSrc = user3IconSrc;
         this.liked = liked;
+        this.bookmarked = bookmarked;
         this.latestUserLike = latestUserLike;
         this.userLikeCount = userLikeCount;
         this.latestComment = latestComment;
@@ -87,6 +89,14 @@ public class PhotoPostDataModel {
 
     public boolean isLiked() {
         return liked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
+    }
+
+    public boolean isBookmarked() {
+        return bookmarked;
     }
 
     public void setLatestUserLike(String latestUserLike) {

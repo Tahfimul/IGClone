@@ -1,7 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
+                                             android:layout_height="wrap_content"
                     android:id="@+id/more_btn_fragment_layout">
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reportBtn"
+            android:background="@android:color/white"
+            android:text="Report"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reportBtn"
+            android:id="@+id/copyLink"
+            android:background="@android:color/white"
+            android:text="Copy Link"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/copyLink"
+            android:id="@+id/turnOnPostNotificationsBtn"
+            android:background="@android:color/white"
+            android:text="Turn On Post Notification"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/turnOnPostNotificationsBtn"
+            android:id="@+id/shareLinkBtn"
+            android:background="@android:color/white"
+            android:text="Share Link..."
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shareLinkBtn"
+            android:id="@+id/shareOnWhatsAppBtn"
+            android:background="@android:color/white"
+            android:text="Share On Whats App"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shareOnWhatsAppBtn"
+            android:id="@+id/shareOnMassengerBtn"
+            android:background="@android:color/white"
+            android:text="Share on Massenger"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shareOnMassengerBtn"
+            android:id="@+id/unfollowBtn"
+            android:background="@android:color/white"
+            android:text="Unfollow"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/unfollowBtn"
+            android:id="@+id/blockBtn"
+            android:background="@android:color/white"
+            android:text="Block"
+            android:textAllCaps="false"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:paddingStart="10dp"/>
+
+</RelativeLayout>

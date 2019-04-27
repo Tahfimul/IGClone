@@ -34,6 +34,7 @@ public class ProfileFeedFragment extends Fragment {
     }
 
     private void setUpPhotoPostRecycler() {
+        System.out.println("init photo post recycler");
         PostUtil.initProfilePhotoPostRecycler(photoPostRecycler, getContext(), getFragmentManager());
     }
 }
