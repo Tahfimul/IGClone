@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 import com.example.igclone.R;
 import com.example.igclone.Util.CommentsUtil;
+import com.example.igclone.Util.SendToUserUtil;
 
 public class CommentsDialog extends DialogFragment implements View.OnClickListener{
     public static String TAG = "FullScreenDialog";
@@ -65,6 +68,9 @@ public class CommentsDialog extends DialogFragment implements View.OnClickListen
                 dismiss();
                 break;
             case R.id.share_btn:
+                ModalSendToBottomSheet cmntBtnDiag = new ModalSendToBottomSheet();
+                FragmentTransaction ft1 = getFragmentManager().beginTransaction();
+                cmntBtnDiag.show(ft1, "ok");
                 Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
                 break;
         }
