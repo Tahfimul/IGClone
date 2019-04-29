@@ -1,8 +1,5 @@
 package com.example.igclone.Adapters;
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,21 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.example.igclone.DataModel.PhotoPostDataModel;
+import com.example.igclone.Fragments.CommentsDialog;
 import com.example.igclone.Fragments.MoreBtnDiag;
 import com.example.igclone.PosstData.ProfilePhotoFeedData;
 import com.example.igclone.R;
-import com.example.igclone.Util.CommentClickableSpan;
-import com.example.igclone.Util.CommentUserClickableSpan;
+import com.example.igclone.Util.NormalTextClickableSpan;
+import com.example.igclone.Util.BoldTextClickableSpan;
 import com.example.igclone.Util.PostUtil;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import static com.example.igclone.UserProfile.Util.UserProfileNavUtil.getTimeAgo;
 
@@ -105,9 +99,9 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
 //            setPostPhotoDoubleTapListener();
 
             if (data.isLiked())
-                likeBtn.setImageResource(R.drawable.ic_liked);
+                PostUtil.likeBtnLikedInteractionAnimate(likeBtn, itemView.getContext());
             else
-                likeBtn.setImageResource(R.drawable.ic_interactions);
+                PostUtil.likeBtnUnlikedInteractionAnimate(likeBtn, itemView.getContext());
 
             likeBtn.setOnClickListener(this);
 
@@ -127,30 +121,15 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
             statsBar2.setOnClickListener(this);
             totalInteractionCount.setText(String.valueOf(data.getUserLikeCount()));
 
-            setLatestCommentText(data);
+            int color = itemView.getContext().getResources().getColor(android.R.color.black, null);
+
+            latestComment.setText(PostUtil.getCaptionText(data.getLatestCommentUsername(), data.getLatestComment(), color));
+            latestComment.setMovementMethod(LinkMovementMethod.getInstance());
 
             viewAllComments.setOnClickListener(this);
 
-            setTimestamp(data);
-
-        }
-
-        private void setLatestCommentText(PhotoPostDataModel data) {
-            String latestCommentText = data.getLatestCommentUsername() + " " +data.getLatestComment();
-            SpannableString spannableString = new SpannableString(latestCommentText);
-
-            int color = itemView.getContext().getResources().getColor(android.R.color.black, null);
-
-            spannableString.setSpan(new CommentUserClickableSpan(latestCommentText, color), 0, data.getLatestCommentUsername().length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(new CommentClickableSpan(latestCommentText, color), data.getLatestCommentUsername().length()+1, latestCommentText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-            latestComment.setText(spannableString);
-            latestComment.setMovementMethod(LinkMovementMethod.getInstance());
-        }
-
-        private void setTimestamp(PhotoPostDataModel data)
-        {
             timeStamp.setText(getTimeAgo(data.getTimeStamp(), itemView.getContext()));
+
         }
 
 
@@ -168,6 +147,9 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                     break;
 
                 case R.id.comment_btn:
+                    CommentsDialog cmntBtnDiag = new CommentsDialog();
+                    FragmentTransaction ft1 = fragmentManager.beginTransaction();
+                    cmntBtnDiag.show(ft1, "ok");
                     break;
                 case R.id.share_btn:
                     break;
@@ -232,12 +214,13 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                     photoPostViewHolder.postPhotoInteractedIcn.setVisibility(View.VISIBLE);
                     data.setLiked(true);
                     notifyDataSetChanged();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            photoPostViewHolder.postPhotoInteractedIcn.setVisibility(View.GONE);
-                        }
-                    }, 1000);
+
+                    PostUtil.photoInteractionAnimateUp(photoPostViewHolder.postPhotoInteractedIcn, photoPostViewHolder.itemView.getContext());
+
+                    data.setLiked(true);
+                    dataset.initData();
+                    dataset.updateData(data);
+                    notifyDataSetChanged();
 
 
                     return super.onDoubleTap(e);

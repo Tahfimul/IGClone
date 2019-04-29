@@ -8,13 +8,13 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import com.example.igclone.R;
 
-public class CommentClickableSpan extends ClickableSpan {
+public class NormalTextClickableSpan extends ClickableSpan {
 
     String spanString;
     int color;
 
 
-    public CommentClickableSpan(String spanString, int color)
+    public NormalTextClickableSpan(String spanString, int color)
     {
         super();
         this.spanString = spanString;

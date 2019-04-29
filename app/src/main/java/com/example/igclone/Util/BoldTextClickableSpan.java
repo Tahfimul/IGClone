@@ -9,12 +9,12 @@ import android.text.style.URLSpan;
 import android.view.View;
 import com.example.igclone.R;
 
-public class CommentUserClickableSpan extends ClickableSpan {
+public class BoldTextClickableSpan extends ClickableSpan {
 
     String spanString;
     int color;
 
-    public CommentUserClickableSpan(String spanString, int color)
+    public BoldTextClickableSpan(String spanString, int color)
     {
         super();
         this.spanString = spanString;
