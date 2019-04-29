@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import butterknife.BindView;
 import com.example.igclone.R;
 import com.example.igclone.Util.CommentsUtil;
 import com.example.igclone.Util.SendToUserUtil;
@@ -68,6 +69,7 @@ public class CommentsDialog extends DialogFragment implements View.OnClickListen
                 dismiss();
                 break;
             case R.id.share_btn:
+//                SendToUserUtil.showSendToUserModal(getActivity());
                 ModalSendToBottomSheet cmntBtnDiag = new ModalSendToBottomSheet();
                 FragmentTransaction ft1 = getFragmentManager().beginTransaction();
                 cmntBtnDiag.show(ft1, "ok");

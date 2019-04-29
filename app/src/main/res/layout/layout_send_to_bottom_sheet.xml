@@ -1,146 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
->
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/layout_send_to_bottom_sheet"
+        app:layout_behavior="@string/bottom_sheet_behavior">
 
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/layout_send_to_bottom_sheet"
-            app:layout_behavior="@string/bottom_sheet_behavior">
-
-    <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            android:background="@android:color/white"
-            android:elevation="4dp">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send To"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"/>
-
-    </android.support.v7.widget.Toolbar>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/toolbar"
-            android:id="@+id/message_area_top_line"
-            android:background="@android:color/darker_gray"/>
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_below="@id/message_area_top_line"
-            android:id="@+id/message_area_container"
-            android:background="@android:color/white">
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/circle_border"
-                android:padding="10dp"
-                android:id="@+id/ic_curr_user"/>
-
-        <EditText
+        <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:maxLength="1024"
-                android:background="@android:color/transparent"
-                android:layout_toRightOf="@id/ic_curr_user"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text=""
-                android:textColor="@android:color/black"
-                android:hint="Message here"
-                android:id="@+id/search_input"/>
-    </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                android:background="@android:color/white"
+                android:elevation="4dp">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send To"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"/>
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/message_area_container"
-            android:id="@+id/message_area_bottom_line"
-            android:background="@android:color/darker_gray"/>
+        </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollViewoll"
-            android:layout_below="@id/message_area_bottom_line">
-
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/toolbar"
+                android:id="@+id/message_area_top_line"
+                android:background="@android:color/darker_gray"/>
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="56dp"
+                android:layout_below="@id/message_area_top_line"
+                android:id="@+id/message_area_container"
+                android:background="@android:color/white">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/circle_border"
+                    android:padding="10dp"
+                    android:id="@+id/ic_curr_user"/>
 
-                <RelativeLayout
+            <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:id="@+id/search_area_container"
-                    android:background="@android:color/white">
-                    <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_discovery"
-                            android:padding="10dp"
-                            android:id="@+id/ic_search"/>
-
-                    <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:maxLength="1024"
-                            android:background="@android:color/transparent"
-                            android:layout_toRightOf="@id/ic_search"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text=""
-                            android:textColor="@android:color/black"
-                            android:hint="Message here"
-                            android:id="@+id/comment_input"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:id="@+id/add_to_story_area_container"
-                    android:background="@android:color/white"
-                    android:layout_below="@id/search_area_container">
-                    <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/circle_border"
-                            android:padding="10dp"
-                            android:id="@+id/ic_user_profile"/>
-
-                    <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:maxLength="1024"
-                            android:background="@android:color/transparent"
-                            android:layout_toRightOf="@id/ic_user_profile"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="add to story"
-                            android:textSize="15sp"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/colorIGBlue"
-                            android:id="@+id/add_to_story_btn"/>
-                </RelativeLayout>
-
-                <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/friend_users"
-                        android:layout_below="@id/add_to_story_area_container"/>
+                    android:layout_height="match_parent"
+                    android:maxLength="1024"
+                    android:background="@android:color/transparent"
+                    android:layout_toRightOf="@id/ic_curr_user"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text=""
+                    android:textColor="@android:color/black"
+                    android:hint="Message here"
+                    android:id="@+id/search_input"/>
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
-    </RelativeLayout>
 
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/message_area_container"
+                android:id="@+id/message_area_bottom_line"
+                android:background="@android:color/darker_gray"/>
 
+        <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/scrollViewoll"
+                android:layout_below="@id/message_area_bottom_line">
 
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:id="@+id/search_area_container"
+                        android:background="@android:color/white">
+                        <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_discovery"
+                                android:padding="10dp"
+                                android:id="@+id/ic_search"/>
 
+                        <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:maxLength="1024"
+                                android:background="@android:color/transparent"
+                                android:layout_toRightOf="@id/ic_search"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text=""
+                                android:textColor="@android:color/black"
+                                android:hint="Message here"
+                                android:id="@+id/comment_input"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:id="@+id/add_to_story_area_container"
+                        android:background="@android:color/white"
+                        android:layout_below="@id/search_area_container">
+                        <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/circle_border"
+                                android:padding="10dp"
+                                android:id="@+id/ic_user_profile"/>
+
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:maxLength="1024"
+                                android:background="@android:color/transparent"
+                                android:layout_toRightOf="@id/ic_user_profile"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="add to story"
+                                android:textSize="15sp"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/colorIGBlue"
+                                android:id="@+id/add_to_story_btn"/>
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/friend_users"
+                            android:layout_below="@id/add_to_story_area_container"/>
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
