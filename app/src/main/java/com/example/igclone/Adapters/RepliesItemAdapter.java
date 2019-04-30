@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.igclone.DataModel.CommentsDataModel;
+import com.example.igclone.DataModel.MainItem;
 import com.example.igclone.R;
+import com.example.igclone.Util.CommentsUtil;
 import com.example.igclone.ViewHolders.MainItemVH;
 
 import java.util.ArrayList;
@@ -30,8 +32,26 @@ public class RepliesItemAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        MainItemVH vh = (MainItemVH) viewHolder;
+        final MainItemVH vh = (MainItemVH) viewHolder;
+        final CommentsDataModel data = dataset.get(i);
         vh.bind(dataset.get(i));
+        vh.likeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(data.isLiked())
+                {
+                    CommentsUtil.likeBtnUnlikedInteractionAnimate(vh.likeBtn, vh.itemView.getContext());
+                    data.setLiked(false);
+                }
+                else {
+                    CommentsUtil.likeBtnLikedInteractionAnimate(vh.likeBtn, vh.itemView.getContext());
+                    data.setLiked(true);
+                }
+
+                notifyDataSetChanged();
+
+            }
+        });
     }
 
     @Override

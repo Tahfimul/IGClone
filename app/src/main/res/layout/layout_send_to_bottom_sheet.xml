@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/layout_send_to_bottom_sheet"
-        app:layout_behavior="@string/bottom_sheet_behavior">
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        app:behavior_hideable="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_tops_rec">
 
         <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/toolbar"
+                android:id="@+id/modalToolbar"
                 android:background="@android:color/white"
                 android:elevation="4dp">
             <TextView
@@ -28,9 +26,18 @@
         </android.support.v7.widget.Toolbar>
 
         <View
+                android:layout_width="50dp"
+                android:layout_height="10dp"
+                android:layout_below="@id/modalToolbar"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rounded_rec_blue"
+                android:id="@+id/modalIndicator"/>
+
+        <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/toolbar"
+                android:layout_below="@id/modalIndicator"
                 android:id="@+id/message_area_top_line"
                 android:background="@android:color/darker_gray"/>
         <RelativeLayout
@@ -69,9 +76,10 @@
 
         <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/scrollViewoll"
-                android:layout_below="@id/message_area_bottom_line">
+                android:layout_below="@id/message_area_bottom_line"
+                android:background="@android:color/white">
 
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -133,10 +141,9 @@
 
                     <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:id="@+id/friend_users"
                             android:layout_below="@id/add_to_story_area_container"/>
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>

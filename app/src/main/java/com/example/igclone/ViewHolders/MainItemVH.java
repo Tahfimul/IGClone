@@ -16,10 +16,11 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
 
     private ImageView userIcn;
     private TextView txtContent;
-    private ImageButton likeBtn;
+    public ImageButton likeBtn;
     private TextView timestamp;
     private TextView likeCount;
     private TextView replyBtn;
+    private CommentsDataModel data;
 
     public MainItemVH(@NonNull View itemView) {
         super(itemView);
@@ -34,12 +35,20 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
 
     public void bind(CommentsDataModel data)
     {
+        this.data = data;
+
         userIcn.setImageResource(data.getUserIcnSrc());
 
         int color = itemView.getContext().getResources().getColor(android.R.color.black, null);
         txtContent.setText(CommentsUtil.getCommentText(data.getUsername(), data.getComment(), color));
 
         likeBtn.setOnClickListener(this);
+
+        if(data.isLiked())
+            likeBtn.setImageResource(R.drawable.ic_liked);
+        else
+            likeBtn.setImageResource(R.drawable.ic_interactions);
+
 
         timestamp.setText(PostUtil.getTimeAgo(data.getTimestamp(), itemView.getContext()));
         timestamp.setTextColor(color);
@@ -58,6 +67,15 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
         {
             case R.id.like_btn:
                 Toast.makeText(itemView.getContext(), "Liked", Toast.LENGTH_SHORT).show();
+//                if (data.isLiked()) {
+//                    CommentsUtil.likeBtnUnlikedInteractionAnimate(likeBtn, itemView.getContext());
+//                    data.setLiked(false);
+//                }
+//                else
+//                {
+//                    CommentsUtil.likeBtnLikedInteractionAnimate(likeBtn, itemView.getContext());
+//                    data.setLiked(true);
+//                }
                 break;
             case R.id.reply_btn:
                 Toast.makeText(itemView.getContext(), "Reply", Toast.LENGTH_SHORT).show();

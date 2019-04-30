@@ -25,6 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewPost.Util.SpinnerActivity"/>
+        <activity android:name=".Comments.CommentsActivity"/>
+
     </application>
 
 </manifest>

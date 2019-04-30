@@ -1,5 +1,6 @@
 package com.example.igclone.Adapters;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -9,8 +10,8 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.view.*;
 import android.widget.*;
+import com.example.igclone.Comments.CommentsActivity;
 import com.example.igclone.DataModel.PhotoPostDataModel;
-import com.example.igclone.Fragments.CommentsDialog;
 import com.example.igclone.Fragments.MoreBtnDiag;
 import com.example.igclone.PosstData.ProfilePhotoFeedData;
 import com.example.igclone.R;
@@ -96,7 +97,6 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
             username.setText(data.getUsername());
             moreBtn.setOnClickListener(this);
             postPhoto.setImageResource(data.getPhotoSrc());
-//            setPostPhotoDoubleTapListener();
 
             if (data.isLiked())
                 PostUtil.likeBtnLikedInteractionAnimate(likeBtn, itemView.getContext());
@@ -147,9 +147,9 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                     break;
 
                 case R.id.comment_btn:
-                    CommentsDialog cmntBtnDiag = new CommentsDialog();
-                    FragmentTransaction ft1 = fragmentManager.beginTransaction();
-                    cmntBtnDiag.show(ft1, "ok");
+                    Intent commentsIntent = new Intent(itemView.getContext(), CommentsActivity.class);
+                    itemView.getContext().startActivity(commentsIntent);
+
                     break;
                 case R.id.share_btn:
                     break;

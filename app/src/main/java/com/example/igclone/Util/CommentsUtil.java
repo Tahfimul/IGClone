@@ -1,10 +1,15 @@
 package com.example.igclone.Util;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.TypedValue;
+import android.widget.ImageView;
 import com.example.igclone.Adapters.CommentsRecyclerAdapter;
 import com.example.igclone.Adapters.RepliesItemAdapter;
 import com.example.igclone.DataModel.CommentsDataModel;
@@ -53,6 +58,114 @@ public class CommentsUtil {
         spannableString.setSpan(new NormalTextClickableSpan(latestCommentText, color), username.length()+1, latestCommentText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         return spannableString;
+    }
+
+    public static void likeBtnLikedInteractionAnimate(final ImageView likeBtn, final Context context)
+    {
+
+        ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(likeBtn, "scaleX", 0f);
+        scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(likeBtn, "scaleY", 0f);
+        scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX1, scaleY1);
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                likeBtn.setImageResource(R.drawable.ic_liked);
+                ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(likeBtn, "scaleX", 1.525f);
+                scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(likeBtn, "scaleY", 1.525f);
+                scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ1 = ObjectAnimator.ofFloat(likeBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 4,
+                        context.getResources().getDisplayMetrics()) );
+                translationZ1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(likeBtn, "scaleX", 1.0f);
+                scaleX2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleX2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(likeBtn, "scaleY", 1.0f);
+                scaleY2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleY2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ2 = ObjectAnimator.ofFloat(likeBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 0,
+                        likeBtn.getResources().getDisplayMetrics()));
+                translationZ2.setDuration(likeBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                translationZ2.setStartDelay(likeBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(scaleX1, scaleY1, translationZ1, scaleX2, scaleY2, translationZ2);
+                animatorSet.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animatorSet.start();
+    }
+
+    public static void likeBtnUnlikedInteractionAnimate(final ImageView likeBtn, final Context context)
+    {
+
+        ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(likeBtn, "scaleX", 0f);
+        scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(likeBtn, "scaleY", 0f);
+        scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX1, scaleY1);
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                likeBtn.setImageResource(R.drawable.ic_interactions);
+                ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(likeBtn, "scaleX", 1.525f);
+                scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(likeBtn, "scaleY", 1.525f);
+                scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ1 = ObjectAnimator.ofFloat(likeBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 4,
+                        context.getResources().getDisplayMetrics()) );
+                translationZ1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(likeBtn, "scaleX", 1.0f);
+                scaleX2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleX2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(likeBtn, "scaleY", 1.0f);
+                scaleY2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleY2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ2 = ObjectAnimator.ofFloat(likeBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 0,
+                        likeBtn.getResources().getDisplayMetrics()));
+                translationZ2.setDuration(likeBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                translationZ2.setStartDelay(likeBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(scaleX1, scaleY1, translationZ1, scaleX2, scaleY2, translationZ2);
+                animatorSet.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animatorSet.start();
     }
 
     public static String getTimeAgo(long time, Context ctx) {

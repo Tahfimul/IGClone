@@ -9,6 +9,7 @@ import com.example.igclone.DataModel.ListItem;
 import com.example.igclone.DataModel.MainItem;
 import com.example.igclone.DataModel.RepliesItem;
 import com.example.igclone.R;
+import com.example.igclone.Util.CommentsUtil;
 import com.example.igclone.ViewHolders.MainItemVH;
 import com.example.igclone.ViewHolders.RepliesItemVH;
 
@@ -52,14 +53,30 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         int type = getItemViewType(i);
         if (type == ListItem.TYPE_MAIN) {
-            MainItem mainItem = (MainItem) dataset.get(i);
-            MainItemVH  mainItemVH = (MainItemVH) viewHolder;
+            final MainItem mainItem = (MainItem) dataset.get(i);
+            final MainItemVH  mainItemVH = (MainItemVH) viewHolder;
             mainItemVH.bind(mainItem.getData());
+            mainItemVH.likeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mainItem.getData().isLiked())
+                    {
+                        CommentsUtil.likeBtnUnlikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
+                        mainItem.getData().setLiked(false);
+                    }
+                    else {
+                        CommentsUtil.likeBtnLikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
+                        mainItem.getData().setLiked(true);
+                    }
+
+                }
+            });
         }
         if (type == ListItem.TYPE_REPLIES){
             RepliesItem repliesItem = (RepliesItem) dataset.get(i);
             RepliesItemVH  repliesItemVH = (RepliesItemVH) viewHolder;
             repliesItemVH.bind(repliesItem.getData());
+
         }
     }
 
