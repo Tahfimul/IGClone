@@ -45,9 +45,6 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         modalIndicator = findViewById(R.id.modalIndicator);
         modalSendToUserRecycler = findViewById(R.id.friend_users);
 
-        SendToUserUtil.setModalBehavior(modal, modalSendToUserToolbar, modalIndicator);
-        SendToUserUtil.hideSendToUserModal(modal);
-
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         CommentsUtil.initCommentsRecycler(recyclerView, this);
@@ -61,20 +58,13 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
             case R.id.share_btn:
-                SendToUserUtil.showSendToUserModal(modal);
-                SendToUserUtil.initSendToUserRecycler(modalSendToUserRecycler, this);
+                SendToUserUtil.showSendToUserModal(getSupportFragmentManager());
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        int sendToUserModalState = SendToUserUtil.getModalBehaviorState(modal);
-        if(sendToUserModalState==BottomSheetBehavior.STATE_EXPANDED || sendToUserModalState == BottomSheetBehavior.STATE_HALF_EXPANDED)
-        {
-            SendToUserUtil.hideSendToUserModal(modal);
-        }
-        else
             super.onBackPressed();
     }
 }

@@ -17,10 +17,7 @@ import com.example.igclone.DataModel.PhotoPostDataModel;
 import com.example.igclone.Fragments.MoreBtnDiag;
 import com.example.igclone.PosstData.ProfilePhotoFeedData;
 import com.example.igclone.R;
-import com.example.igclone.Util.NormalTextClickableSpan;
-import com.example.igclone.Util.BoldTextClickableSpan;
-import com.example.igclone.Util.PostUtil;
-import com.example.igclone.Util.SendToUserUtil;
+import com.example.igclone.Util.*;
 
 import java.util.ArrayList;
 
@@ -106,11 +103,18 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
             else
                 PostUtil.likeBtnUnlikedInteractionAnimate(likeBtn, itemView.getContext());
 
+            if (data.isBookmarked())
+                PostUtil.unbookmarkedInteractionAnimate(bookmarkBtn, itemView.getContext());
+            else
+                PostUtil.bookmarkedInteractionAnimate(bookmarkBtn, itemView.getContext());
+
             likeBtn.setOnClickListener(this);
 
             commentBtn.setOnClickListener(this);
             shareBtn.setOnClickListener(this);
             bookmarkBtn.setOnClickListener(this);
+
+
             statsBar.setOnClickListener(this);
 
             if(data.getUser1IconSrc()!=0)
@@ -138,7 +142,8 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
 
         @Override
         public void onClick(View v) {
-            switch (v.getId())
+            int viewId = v.getId();
+            switch (viewId)
             {
                 case R.id.more_btn:
                     MoreBtnDiag moreBtnDiag = new MoreBtnDiag();
@@ -146,21 +151,12 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                     moreBtnDiag.show(ft, "ok");
                     break;
                 case R.id.post_image:
-
-                    break;
-
-                case R.id.comment_btn:
-                    Intent commentsIntent = new Intent(itemView.getContext(), CommentsActivity.class);
-                    itemView.getContext().startActivity(commentsIntent);
                     break;
                 case R.id.share_btn:
                     sendSendToUserTriggerMessage();
 //                    RelativeLayout parentView = ((ViewGroup)itemView.getParent()).findViewById(R.id.layout_send_to_bottom_sheet);
 //                    RelativeLayout modal = itemView.findViewById(R.id.layout_send_to_bottom_sheet);
 //                    SendToUserUtil.showSendToUserModal(parentView);
-                    break;
-                case R.id.bookmark_btn:
-
                     break;
                 case R.id.stats_bar:
                     break;
@@ -169,6 +165,8 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                 case R.id.stats_bar2:
                     break;
             }
+            if(viewId==R.id.comment_btn||viewId==R.id.view_all_comments)
+                showComments();
         }
 
 
@@ -180,6 +178,13 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
             Intent intent = new Intent("sendToUser");
             // You can also include some extra data.
             LocalBroadcastManager.getInstance(itemView.getContext()).sendBroadcast(intent);
+        }
+
+        private void showComments()
+        {
+            Intent commentsIntent = new Intent(itemView.getContext(), CommentsActivity.class);
+            itemView.getContext().startActivity(commentsIntent);
+
         }
     }
 
@@ -217,6 +222,20 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                 {
                     data.setLiked(true);
                 }
+                dataset.initData();
+                dataset.updateData(data);
+                notifyDataSetChanged();
+            }
+        });
+
+        photoPostViewHolder.bookmarkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(data.isBookmarked())
+                    data.setBookmarked(false);
+                else
+                    data.setBookmarked(true);
+
                 dataset.initData();
                 dataset.updateData(data);
                 notifyDataSetChanged();

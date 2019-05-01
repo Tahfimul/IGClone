@@ -268,6 +268,114 @@ public class PostUtil {
         animatorSet.start();
     }
 
+    public static void bookmarkedInteractionAnimate(final ImageView bookmarkBtn, final Context context)
+    {
+
+        ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleX", 0f);
+        scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleY", 0f);
+        scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX1, scaleY1);
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                bookmarkBtn.setImageResource(R.drawable.ic_bookmarked);
+                ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleX", 1.525f);
+                scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleY", 1.525f);
+                scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ1 = ObjectAnimator.ofFloat(bookmarkBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 4,
+                        context.getResources().getDisplayMetrics()) );
+                translationZ1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleX", 1.0f);
+                scaleX2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleX2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleY", 1.0f);
+                scaleY2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleY2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ2 = ObjectAnimator.ofFloat(bookmarkBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 0,
+                        bookmarkBtn.getResources().getDisplayMetrics()));
+                translationZ2.setDuration(bookmarkBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                translationZ2.setStartDelay(bookmarkBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(scaleX1, scaleY1, translationZ1, scaleX2, scaleY2, translationZ2);
+                animatorSet.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animatorSet.start();
+    }
+
+    public static void unbookmarkedInteractionAnimate(final ImageView bookmarkBtn, final Context context)
+    {
+
+        ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleX", 0f);
+        scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleY", 0f);
+        scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX1, scaleY1);
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                bookmarkBtn.setImageResource(R.drawable.ic_bookmark);
+                ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleX", 1.525f);
+                scaleX1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleY", 1.525f);
+                scaleY1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ1 = ObjectAnimator.ofFloat(bookmarkBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 4,
+                        context.getResources().getDisplayMetrics()) );
+                translationZ1.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleX", 1.0f);
+                scaleX2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleX2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(bookmarkBtn, "scaleY", 1.0f);
+                scaleY2.setDuration(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                scaleY2.setStartDelay(context.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                ObjectAnimator translationZ2 = ObjectAnimator.ofFloat(bookmarkBtn, "translationZ", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 0,
+                        bookmarkBtn.getResources().getDisplayMetrics()));
+                translationZ2.setDuration(bookmarkBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+                translationZ2.setStartDelay(bookmarkBtn.getResources().getInteger(android.R.integer.config_shortAnimTime));
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(scaleX1, scaleY1, translationZ1, scaleX2, scaleY2, translationZ2);
+                animatorSet.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animatorSet.start();
+    }
+
     public static String getTimeAgo(long time, Context ctx) {
 
         final int SECOND_MILLIS = 1000;

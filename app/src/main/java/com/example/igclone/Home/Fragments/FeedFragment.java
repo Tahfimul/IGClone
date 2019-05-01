@@ -51,9 +51,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener {
         Toolbar modalToolbar = view.findViewById(R.id.modalToolbar);
         View modalIndicator = view.findViewById(R.id.modalIndicator);
 
-//        SendToUserUtil.setModalBehavior(modal, modalToolbar, modalIndicator);
-//        SendToUserUtil.hideSendToUserModal(modal);
-
         // Register to receive messages.
         // We are registering an observer (mSendToUserBottomSheetMessageReceiver) to receive Intents
         // with actions named "sendToUser".

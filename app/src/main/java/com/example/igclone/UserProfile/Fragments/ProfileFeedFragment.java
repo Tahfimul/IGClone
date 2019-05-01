@@ -30,7 +30,6 @@ public class ProfileFeedFragment extends Fragment {
 
         setUpPhotoPostRecycler();
 
-
     }
 
     private void setUpPhotoPostRecycler() {

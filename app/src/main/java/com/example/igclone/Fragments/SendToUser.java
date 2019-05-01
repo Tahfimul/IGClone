@@ -20,9 +20,8 @@ import com.example.igclone.Util.SendToUserUtil;
 
 public class SendToUser extends BottomSheetDialogFragment{
 
-    RelativeLayout modal;
-    Toolbar modalToolbar;
-    View modalIndicator;
+    private Toolbar modalToolbar;
+    private View modalIndicator;
 
 
 
@@ -40,7 +39,7 @@ public class SendToUser extends BottomSheetDialogFragment{
                         switch (newState)
                         {
                             case BottomSheetBehavior.STATE_HIDDEN:
-                                modalToolbar.setVisibility(View.INVISIBLE);
+                                dismiss();
                                 break;
                             case BottomSheetBehavior.STATE_EXPANDED: {
                                 modalIndicator.setVisibility(View.GONE);
@@ -54,7 +53,6 @@ public class SendToUser extends BottomSheetDialogFragment{
                             }
                             case BottomSheetBehavior.STATE_COLLAPSED: {
                                 modalToolbar.setVisibility(View.GONE);
-                                modalToolbar.setVisibility(View.INVISIBLE);
                             }
                             break;
                             case BottomSheetBehavior.STATE_DRAGGING: {
@@ -81,19 +79,14 @@ public class SendToUser extends BottomSheetDialogFragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //        SendToUser sendToUser =
         return inflater.inflate(R.layout.layout_send_to_user_bottom_sheet_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        modal = view.findViewById(R.id.layout_send_to_bottom_sheet);
         modalToolbar = view.findViewById(R.id.modalToolbar);
         modalIndicator = view.findViewById(R.id.modalIndicator);
-//        BottomSheetBehavior behavior = BottomSheetBehavior.from(view.findViewById(android.support.design.R.id.design_bottom_sheet));
-//        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-//        SendToUserUtil.setModalBehavior(modal, modalToolbar, modalIndicator);
     }
 
 

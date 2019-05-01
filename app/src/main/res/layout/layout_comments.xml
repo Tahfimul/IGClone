@@ -7,6 +7,4 @@
 
     <include layout="@layout/layout_comments_main_content"/>
 
-    <include layout="@layout/layout_send_to_bottom_sheet"/>
-
 </android.support.design.widget.CoordinatorLayout>
