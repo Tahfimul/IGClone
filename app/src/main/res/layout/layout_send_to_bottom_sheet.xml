@@ -5,9 +5,7 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/layout_send_to_bottom_sheet"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        app:behavior_hideable="true"
-        android:layout_alignParentBottom="true"
+
         android:background="@drawable/rounded_tops_rec">
 
         <android.support.v7.widget.Toolbar

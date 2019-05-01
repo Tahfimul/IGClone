@@ -65,7 +65,7 @@ public class SendToUserUtil {
     {
         modalToolbar.setVisibility(View.GONE);
 
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(modal);
+         BottomSheetBehavior behavior = BottomSheetBehavior.from(modal);
 
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import com.example.igclone.Fragments.SendToUser;
 import com.example.igclone.R;
 import com.example.igclone.Util.BottomNavViewHelper;
 import com.example.igclone.Util.PostUtil;
@@ -50,8 +51,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener {
         Toolbar modalToolbar = view.findViewById(R.id.modalToolbar);
         View modalIndicator = view.findViewById(R.id.modalIndicator);
 
-        SendToUserUtil.setModalBehavior(modal, modalToolbar, modalIndicator);
-        SendToUserUtil.hideSendToUserModal(modal);
+//        SendToUserUtil.setModalBehavior(modal, modalToolbar, modalIndicator);
+//        SendToUserUtil.hideSendToUserModal(modal);
 
         // Register to receive messages.
         // We are registering an observer (mSendToUserBottomSheetMessageReceiver) to receive Intents
@@ -95,9 +96,12 @@ public class FeedFragment extends Fragment implements View.OnClickListener {
     private BroadcastReceiver mSendToUserBottomSheetMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SendToUserUtil.showSendToUserModal(modal);
+//            SendToUserUtil.showSendToUserModal(modal);
+            SendToUser sendToUser = new SendToUser();
+            sendToUser.show(getFragmentManager().beginTransaction(), "sendToUser");
         }
     };
+
 
 
 
