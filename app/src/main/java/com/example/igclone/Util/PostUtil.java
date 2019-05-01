@@ -60,6 +60,27 @@ public class PostUtil {
         return spannableString;
     }
 
+    public static void initHomePhotoPostRecycler(RecyclerView recyclerView, Context context, FragmentManager fragmentManager)
+    {
+        ProfilePhotoFeedData data = new ProfilePhotoFeedData();
+
+        if (!profilePhotoPostRecyclerInitalized)
+        {
+            data.initData();
+            profilePhotoPostRecyclerInitalized = true;
+        }
+
+        ArrayList<PhotoPostDataModel> dataset = data.getProfilePhotoFeedDataset();
+
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+
+        PhotoPostRecyclerAdapter adapter = new PhotoPostRecyclerAdapter(dataset, fragmentManager);
+        recyclerView.setAdapter(adapter);
+    }
+
     public static void photoInteractionAnimateUp(final ImageView interactionIcn, final Context context)
     {
         ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(interactionIcn, "scaleX", 1.525f);

@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.example.igclone.Comments.CommentsActivity;
@@ -18,6 +20,7 @@ import com.example.igclone.R;
 import com.example.igclone.Util.NormalTextClickableSpan;
 import com.example.igclone.Util.BoldTextClickableSpan;
 import com.example.igclone.Util.PostUtil;
+import com.example.igclone.Util.SendToUserUtil;
 
 import java.util.ArrayList;
 
@@ -149,9 +152,12 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                 case R.id.comment_btn:
                     Intent commentsIntent = new Intent(itemView.getContext(), CommentsActivity.class);
                     itemView.getContext().startActivity(commentsIntent);
-
                     break;
                 case R.id.share_btn:
+                    sendSendToUserTriggerMessage();
+//                    RelativeLayout parentView = ((ViewGroup)itemView.getParent()).findViewById(R.id.layout_send_to_bottom_sheet);
+//                    RelativeLayout modal = itemView.findViewById(R.id.layout_send_to_bottom_sheet);
+//                    SendToUserUtil.showSendToUserModal(parentView);
                     break;
                 case R.id.bookmark_btn:
 
@@ -163,6 +169,17 @@ public class PhotoPostRecyclerAdapter extends RecyclerView.Adapter<PhotoPostRecy
                 case R.id.stats_bar2:
                     break;
             }
+        }
+
+
+
+        // Send an Intent with an action named "custom-event-name". The Intent sent should
+        // be received by the HomeActivity.
+        private void sendSendToUserTriggerMessage() {
+            Log.d("PhotoPostRecyclrAdapter", "Broadcasting message");
+            Intent intent = new Intent("sendToUser");
+            // You can also include some extra data.
+            LocalBroadcastManager.getInstance(itemView.getContext()).sendBroadcast(intent);
         }
     }
 

@@ -54,7 +54,7 @@ public class SendToUserUtil {
 
     public static void hideSendToUserModal(RelativeLayout modal)
     {
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(modal);
+         BottomSheetBehavior behavior = BottomSheetBehavior.from(modal);
 
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
