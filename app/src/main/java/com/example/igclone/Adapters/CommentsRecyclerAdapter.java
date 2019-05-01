@@ -50,7 +50,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
         int type = getItemViewType(i);
         if (type == ListItem.TYPE_MAIN) {
             final MainItem mainItem = (MainItem) dataset.get(i);
@@ -62,12 +62,17 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
                     if(mainItem.getData().isLiked())
                     {
                         CommentsUtil.likeBtnUnlikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
+                        mainItem.getData().decrementLikeCount();
                         mainItem.getData().setLiked(false);
                     }
                     else {
                         CommentsUtil.likeBtnLikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
+                        mainItem.getData().incrementLikeCount();
                         mainItem.getData().setLiked(true);
                     }
+
+                    CommentsUtil.setMainData(mainItem.getData());
+                    notifyDataSetChanged();
 
                 }
             });

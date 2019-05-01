@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.example.igclone.Comments.Data;
 import com.example.igclone.DataModel.CommentsDataModel;
 import com.example.igclone.DataModel.MainItem;
 import com.example.igclone.R;
@@ -31,7 +32,7 @@ public class RepliesItemAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
         final MainItemVH vh = (MainItemVH) viewHolder;
         final CommentsDataModel data = dataset.get(i);
         vh.bind(dataset.get(i));
@@ -41,15 +42,17 @@ public class RepliesItemAdapter extends RecyclerView.Adapter {
                 if(data.isLiked())
                 {
                     CommentsUtil.likeBtnUnlikedInteractionAnimate(vh.likeBtn, vh.itemView.getContext());
+                    data.decrementLikeCount();
                     data.setLiked(false);
                 }
                 else {
                     CommentsUtil.likeBtnLikedInteractionAnimate(vh.likeBtn, vh.itemView.getContext());
+                    data.incrementLikeCount();
                     data.setLiked(true);
                 }
-
-                notifyDataSetChanged();
-
+                vh.likeCount.setText(data.getLikeCount()+" likes");
+                CommentsUtil.setRepliesData(data);
+//                notifyDataSetChanged();
             }
         });
     }

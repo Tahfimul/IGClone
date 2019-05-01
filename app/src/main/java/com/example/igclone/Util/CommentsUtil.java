@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.widget.ImageView;
 import com.example.igclone.Adapters.CommentsRecyclerAdapter;
 import com.example.igclone.Adapters.RepliesItemAdapter;
+import com.example.igclone.Comments.Data;
 import com.example.igclone.DataModel.CommentsDataModel;
 import com.example.igclone.DataModel.ListItem;
 import com.example.igclone.DataModel.MainItem;
@@ -22,16 +23,24 @@ import java.util.ArrayList;
 
 public class CommentsUtil {
 
+    private static boolean dataInitialized =false;
+    private static Data data = new Data();
+
     public static void initCommentsRecycler(RecyclerView recyclerView, Context ctx)
     {
+        if (!dataInitialized)
+        {
+            System.out.println("init Reycler ran");
+            data.initData();
+            dataInitialized = true;
+        }
         ArrayList<ListItem> data = new ArrayList<>();
 
-        data.add(new MainItem(new CommentsDataModel(R.drawable.circle_border, "Testing", "hello", true, 1556502740, 20)));
+        data.add(new MainItem(CommentsUtil.data.getMainData().get(0)));
 
-        ArrayList<CommentsDataModel> replies = new ArrayList<>();
-        replies.add(new CommentsDataModel(R.drawable.circle_border, "Testing", "hello", true, 1556502740, 20));
-        data.add(new RepliesItem(replies));
-        data.add(new RepliesItem(replies));
+        data.add(new RepliesItem(getRepliesData()));
+
+        data.add(new MainItem(CommentsUtil.data.getMainData().get(1)));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
@@ -48,6 +57,22 @@ public class CommentsUtil {
 
         RepliesItemAdapter adapter = new RepliesItemAdapter(data);
         recyclerView.setAdapter(adapter);
+    }
+
+    public static void setMainData(CommentsDataModel data)
+    {
+        CommentsUtil.data.setMainData(data);
+    }
+
+    public static ArrayList<CommentsDataModel> getRepliesData()
+    {
+
+        return data.getRepliesData();
+    }
+
+    public static void setRepliesData(CommentsDataModel repliesData)
+    {
+        data.setRepliesData(repliesData);
     }
 
     public static SpannableString getCommentText(String username, String comment, int color) {
@@ -203,7 +228,8 @@ public class CommentsUtil {
         } else if (diff < 48 * HOUR_MILLIS) {
             return "yesterday";
         } else {
-            return new java.util.Date(time) + "";
+            System.out.println(new java.util.Date(time).toString().substring(0, 11) );
+            return new java.util.Date(time).toString().substring(0, 11) + "";
         }
     }
 

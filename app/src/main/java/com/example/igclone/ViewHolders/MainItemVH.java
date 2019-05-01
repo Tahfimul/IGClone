@@ -18,7 +18,7 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
     private TextView txtContent;
     public ImageButton likeBtn;
     private TextView timestamp;
-    private TextView likeCount;
+    public TextView likeCount;
     private TextView replyBtn;
     private CommentsDataModel data;
 

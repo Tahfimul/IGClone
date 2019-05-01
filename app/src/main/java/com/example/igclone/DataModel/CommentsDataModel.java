@@ -50,6 +50,17 @@ public class CommentsDataModel {
         this.liked = liked;
     }
 
+    public void incrementLikeCount()
+    {
+        likeCount++;
+    }
+
+    public void decrementLikeCount()
+    {
+        if (likeCount>0)
+            likeCount--;
+    }
+
     public long getTimestamp() {
         return timestamp;
     }
