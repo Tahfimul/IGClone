@@ -1,13 +1,19 @@
 package com.example.igclone.UserProfile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import com.example.igclone.Fragments.SendToUser;
 import com.example.igclone.UserProfile.Fragments.ProfileThumbnailFragment;
 import com.example.igclone.UserProfile.Util.UserProfileUtil;
 import com.example.igclone.Util.BottomNavViewHelper;

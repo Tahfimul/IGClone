@@ -2,6 +2,7 @@ package com.example.igclone.DataModel;
 
 public class PhotoPostDataModel {
 
+    private String postId;
     private int userIconSrc;
     private String username;
     private int photoSrc;
@@ -17,8 +18,9 @@ public class PhotoPostDataModel {
     private int commentCount;
     private long timeStamp;
 
-    public PhotoPostDataModel(int userIconSrc, String username, int photoSrc, int user1IconSrc, int user2IconSrc, int user3IconSrc, boolean liked, boolean bookmarked, String latestUserLike, int userLikeCount, String latestCommentUsername, String latestComment, int commentCount, long timeStamp)
+    public PhotoPostDataModel(String postId, int userIconSrc, String username, int photoSrc, int user1IconSrc, int user2IconSrc, int user3IconSrc, boolean liked, boolean bookmarked, String latestUserLike, int userLikeCount, String latestCommentUsername, String latestComment, int commentCount, long timeStamp)
     {
+        this.postId = postId;
         this.userIconSrc = userIconSrc;
         this.username = username;
         this.photoSrc = photoSrc;
@@ -33,6 +35,14 @@ public class PhotoPostDataModel {
         this.latestCommentUsername = latestCommentUsername;
         this.commentCount = commentCount;
         this.timeStamp = timeStamp;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public String getPostId() {
+        return postId;
     }
 
     public void setUserIconSrc(int userIconSrc) {

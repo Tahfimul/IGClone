@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import com.example.igclone.Fragments.SendToUser;
 import com.example.igclone.Home.Adapters.HomePagerAdapter;
 import com.example.igclone.R;
 
@@ -25,11 +26,12 @@ public class HomeActivity extends AppCompatActivity {
 
         setUpViewPager();
 
-        // Register to receive messages.
-        // We are registering an observer (mMessageReceiver) to receive Intents
-        // with actions named "custom-event-name".
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                new IntentFilter("switch"));
+//        // Register to receive messages.
+//        // We are registering an observer (mMessageReceiver) to receive Intents
+//        // with actions named "switch". from Home Fragments
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mSwitchToHomeFeedReceiver,
+//                new IntentFilter("switch"));
+
 
     }
 
@@ -40,10 +42,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     // Our handler for received Intents. This will be called whenever an Intent
-    // with an action named "switch" is broadcasted.
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    // with an action named "switch" is broadcasted from Home Fragments
+    private BroadcastReceiver mSwitchToHomeFeedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            System.out.println(context.getClass().toString()+"Switch");
             // Get extra data included in the Intent
             int pos = Integer.valueOf(intent.getStringExtra("pos"));
             viewPager.setCurrentItem(pos);

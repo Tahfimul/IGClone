@@ -16,10 +16,12 @@ import java.util.ArrayList;
 
 public class RepliesItemAdapter extends RecyclerView.Adapter {
 
+    private int MainCommentIndex;
     private ArrayList<CommentsDataModel> dataset;
 
-    public RepliesItemAdapter(ArrayList<CommentsDataModel> dataset)
+    public RepliesItemAdapter(int MainCommentIndex, ArrayList<CommentsDataModel> dataset)
     {
+        this.MainCommentIndex = MainCommentIndex;
         this.dataset = dataset;
     }
 
@@ -35,7 +37,7 @@ public class RepliesItemAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
         final MainItemVH vh = (MainItemVH) viewHolder;
         final CommentsDataModel data = dataset.get(i);
-        vh.bind(dataset.get(i));
+        vh.bind(MainCommentIndex, dataset.get(i));
         vh.likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

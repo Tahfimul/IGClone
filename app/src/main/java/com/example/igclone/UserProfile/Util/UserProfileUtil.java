@@ -49,6 +49,7 @@ public class UserProfileUtil {
 
     public static void initProfileNav(Context context, final TabLayout tabLayout, final FragmentManager fragmentManager)
     {
+
         setDefaultConfiguration(tabLayout, fragmentManager);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

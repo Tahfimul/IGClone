@@ -9,7 +9,11 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +24,46 @@ import com.example.igclone.Util.SendToUserUtil;
 
 public class SendToUser extends BottomSheetDialogFragment{
 
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try{
+
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.add(this, tag);
+            ft.commitAllowingStateLoss();
+
+        }
+        catch (IllegalStateException e)
+        {
+            Log.e("SendToUser", e.getMessage());
+        }
+    }
+
     private Toolbar modalToolbar;
     private View modalIndicator;
 
-
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.layout_send_to_user_bottom_sheet_fragment, container, false);
+    }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final BottomSheetDialog diag = (BottomSheetDialog)  super.onCreateDialog(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        modalToolbar = view.findViewById(R.id.modalToolbar);
+        modalIndicator = view.findViewById(R.id.modalIndicator);
+        RecyclerView recyclerView = view.findViewById(R.id.friend_users);
+
+        setModalBehavior();
+        SendToUserUtil.initSendToUserRecycler(recyclerView, getContext());
+
+
+    }
+
+    private void setModalBehavior() {
+        final BottomSheetDialog diag = (BottomSheetDialog) getDialog();
         diag.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -73,20 +109,6 @@ public class SendToUser extends BottomSheetDialogFragment{
                 });
             }
         });
-        return diag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_send_to_user_bottom_sheet_fragment, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        modalToolbar = view.findViewById(R.id.modalToolbar);
-        modalIndicator = view.findViewById(R.id.modalIndicator);
     }
 
 

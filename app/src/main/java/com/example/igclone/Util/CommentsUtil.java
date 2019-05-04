@@ -9,10 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import com.example.igclone.Adapters.CommentsRecyclerAdapter;
 import com.example.igclone.Adapters.RepliesItemAdapter;
 import com.example.igclone.Comments.Data;
+import com.example.igclone.DB.PostDB;
 import com.example.igclone.DataModel.CommentsDataModel;
 import com.example.igclone.DataModel.ListItem;
 import com.example.igclone.DataModel.MainItem;
@@ -34,13 +37,17 @@ public class CommentsUtil {
             data.initData();
             dataInitialized = true;
         }
-        ArrayList<ListItem> data = new ArrayList<>();
 
-        data.add(new MainItem(CommentsUtil.data.getMainData().get(0)));
+        PostDB postDB = new PostDB();
 
-        data.add(new RepliesItem(getRepliesData()));
+        ArrayList<ListItem> data = postDB.retrievePostMainComments("first");
 
-        data.add(new MainItem(CommentsUtil.data.getMainData().get(1)));
+
+//        data.add(new MainItem(CommentsUtil.data.getMainData().get(0)));
+//
+//        data.add(new RepliesItem(getRepliesData()));
+//
+//        data.add(new MainItem(CommentsUtil.data.getMainData().get(1)));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
@@ -49,13 +56,22 @@ public class CommentsUtil {
         recyclerView.setAdapter(adapter);
     }
 
-    public static void initRepliesItemRecycler(RecyclerView recyclerView, Context ctx, ArrayList<CommentsDataModel> data)
+    public static void showKeyboard(View view)
+    {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+
+    public static void initRepliesItemRecycler(RecyclerView recyclerView, Context ctx, ArrayList<CommentsDataModel> data, int MainCommentIndex)
     {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-        RepliesItemAdapter adapter = new RepliesItemAdapter(data);
+        RepliesItemAdapter adapter = new RepliesItemAdapter(MainCommentIndex, data);
         recyclerView.setAdapter(adapter);
     }
 
@@ -228,7 +244,7 @@ public class CommentsUtil {
         } else if (diff < 48 * HOUR_MILLIS) {
             return "yesterday";
         } else {
-            System.out.println(new java.util.Date(time).toString().substring(0, 11) );
+            System.out.println(" time calculated " );
             return new java.util.Date(time).toString().substring(0, 11) + "";
         }
     }
@@ -236,5 +252,15 @@ public class CommentsUtil {
     private static long getCurrentTime()
     {
         return System.currentTimeMillis();
+    }
+
+    public static void updateMainComment(String postId, int mainCommentIndex)
+    {
+
+    }
+
+    public static void updateReplyComment(String postId, int mainCommentIndex)
+    {
+
     }
 }

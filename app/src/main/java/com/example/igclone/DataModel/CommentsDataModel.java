@@ -1,14 +1,14 @@
 package com.example.igclone.DataModel;
 
 public class CommentsDataModel {
-    private int userIcnSrc;
+    private String userIcnSrc;
     private String username;
     private String comment;
     private boolean liked;
     private long timestamp;
     private int likeCount;
 
-    public CommentsDataModel(int userIcnSrc, String username, String comment, boolean liked, long timestamp, int likeCount)
+    public CommentsDataModel(String userIcnSrc, String username, String comment, boolean liked, long timestamp, int likeCount)
     {
         this.userIcnSrc = userIcnSrc;
         this.username = username;
@@ -18,11 +18,11 @@ public class CommentsDataModel {
         this.likeCount = likeCount;
     }
 
-    public int getUserIcnSrc() {
+    public String getUserIcnSrc() {
         return userIcnSrc;
     }
 
-    public void setUserIcnSrc(int userIcnSrc) {
+    public void setUserIcnSrc(String userIcnSrc) {
         this.userIcnSrc = userIcnSrc;
     }
 

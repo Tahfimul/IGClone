@@ -55,7 +55,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
         if (type == ListItem.TYPE_MAIN) {
             final MainItem mainItem = (MainItem) dataset.get(i);
             final MainItemVH  mainItemVH = (MainItemVH) viewHolder;
-            mainItemVH.bind(mainItem.getData());
+            mainItemVH.bind(mainItem.getMainCommentIndex(), mainItem.getData());
             mainItemVH.likeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -72,15 +72,14 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
                     }
 
                     CommentsUtil.setMainData(mainItem.getData());
-                    notifyDataSetChanged();
-
+                    notifyItemChanged(dataset.indexOf(mainItem));
                 }
             });
         }
         if (type == ListItem.TYPE_REPLIES){
             RepliesItem repliesItem = (RepliesItem) dataset.get(i);
             RepliesItemVH  repliesItemVH = (RepliesItemVH) viewHolder;
-            repliesItemVH.bind(repliesItem.getData());
+            repliesItemVH.bind(repliesItem.getMainCommentIndex(), repliesItem.getData());
 
         }
     }
