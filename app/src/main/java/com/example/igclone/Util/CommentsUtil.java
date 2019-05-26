@@ -3,6 +3,8 @@ package com.example.igclone.Util;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,25 +14,43 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import com.example.igclone.Adapters.CommentsRecyclerADAPTER;
 import com.example.igclone.Adapters.CommentsRecyclerAdapter;
 import com.example.igclone.Adapters.RepliesItemAdapter;
 import com.example.igclone.Comments.Data;
 import com.example.igclone.DB.PostDB;
 import com.example.igclone.DataModel.CommentsDataModel;
-import com.example.igclone.DataModel.ListItem;
-import com.example.igclone.DataModel.MainItem;
-import com.example.igclone.DataModel.RepliesItem;
+import com.example.igclone.Comments.DataModel.ListItem;
+import com.example.igclone.LiveData.CommentsLiveDATA;
+import com.example.igclone.LiveData.CommentsLiveData;
 import com.example.igclone.R;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
-public class CommentsUtil {
+public class CommentsUtil extends ViewModel {
 
     private static boolean dataInitialized =false;
     private static Data data = new Data();
+    private static TreeMap<String, ListItem> listITEMS = new TreeMap<>();
+    private static ArrayList<ListItem> listItems = new ArrayList<>();
+
+    private static PostDB postDB = new PostDB();
+
+//    public MutableLiveData<ArrayList<ListItem>> retrieveCommentItems(String postId)
+//    {
+//        return new CommentsLiveData(postId);
+//    }
+
+    public MutableLiveData<TreeMap<String, ListItem>> retrieveCommentItems(String postId)
+    {
+        return new CommentsLiveDATA(postId);
+    }
 
     public static void initCommentsRecycler(RecyclerView recyclerView, Context ctx)
     {
+//        System.out.println(getListItems().size()+"ListItems Size");
+        System.out.println(getListITEMS().size()+"ListItems Size");
         if (!dataInitialized)
         {
             System.out.println("init Reycler ran");
@@ -38,21 +58,11 @@ public class CommentsUtil {
             dataInitialized = true;
         }
 
-        PostDB postDB = new PostDB();
-
-        ArrayList<ListItem> data = postDB.retrievePostMainComments("first");
-
-
-//        data.add(new MainItem(CommentsUtil.data.getMainData().get(0)));
-//
-//        data.add(new RepliesItem(getRepliesData()));
-//
-//        data.add(new MainItem(CommentsUtil.data.getMainData().get(1)));
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-        CommentsRecyclerAdapter adapter = new CommentsRecyclerAdapter(data);
+//        CommentsRecyclerAdapter adapter = new CommentsRecyclerAdapter(getListItems());
+        CommentsRecyclerADAPTER adapter = new CommentsRecyclerADAPTER(getListITEMS());
         recyclerView.setAdapter(adapter);
     }
 
@@ -64,15 +74,46 @@ public class CommentsUtil {
         }
     }
 
+    public static void dismissKeyboard(View view)
+    {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
-    public static void initRepliesItemRecycler(RecyclerView recyclerView, Context ctx, ArrayList<CommentsDataModel> data, int MainCommentIndex)
+
+    public static void initRepliesItemRecycler(RecyclerView recyclerView, Context ctx, ArrayList<CommentsDataModel> data, long MainCommentTimestamp, int MainCommentIndex)
     {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-        RepliesItemAdapter adapter = new RepliesItemAdapter(MainCommentIndex, data);
+        RepliesItemAdapter adapter = new RepliesItemAdapter(MainCommentTimestamp, MainCommentIndex, data);
         recyclerView.setAdapter(adapter);
+    }
+
+//    public static void setListItems(TreeMap<Long, ListItem> listItems) {
+//        CommentsUtil.listItems = listItems;
+//    }
+
+//    public static TreeMap<Long, ListItem> getListItems() {
+//        return listItems;
+//    }
+
+//    public static void setListItems(ArrayList<ListItem> listItems) {
+//        CommentsUtil.listItems = listItems;
+//    }
+
+    public static void setListITEMS(TreeMap<String, ListItem> listItems) {
+        CommentsUtil.listITEMS= listItems;
+    }
+
+//    public static ArrayList<ListItem> getListItems() {
+//        return listItems;
+//    }
+
+
+    public static TreeMap<String, ListItem> getListITEMS() {
+        return listITEMS;
     }
 
     public static void setMainData(CommentsDataModel data)
@@ -249,18 +290,18 @@ public class CommentsUtil {
         }
     }
 
-    private static long getCurrentTime()
+    public static long getCurrentTime()
     {
         return System.currentTimeMillis();
     }
 
-    public static void updateMainComment(String postId, int mainCommentIndex)
+    public static void updateMainComment(String postId, long timestamp, String comment)
     {
-
+        postDB.postMainComment(postId, timestamp, comment);
     }
 
-    public static void updateReplyComment(String postId, int mainCommentIndex)
+    public static void updateReplyComment(String postId, long mainCommentTimestamp, long timestamp, String comment)
     {
-
+        postDB.postReplyComment(postId, mainCommentTimestamp, timestamp, comment);
     }
 }

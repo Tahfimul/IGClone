@@ -12,6 +12,8 @@ import com.example.igclone.Fragments.SendToUser;
 import com.example.igclone.Home.Adapters.HomePagerAdapter;
 import com.example.igclone.R;
 
+//My Better Version
+
 public class HomeActivity extends AppCompatActivity {
 
     ViewPager viewPager;

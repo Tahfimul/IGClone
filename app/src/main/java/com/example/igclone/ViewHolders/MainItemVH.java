@@ -3,6 +3,7 @@ package com.example.igclone.ViewHolders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
     public TextView likeCount;
     private TextView replyBtn;
     private CommentsDataModel data;
+    private long MainCommentTimestamp;
     private int MainCommentIndex;
 
     public MainItemVH(@NonNull View itemView) {
@@ -35,9 +37,10 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
         replyBtn = itemView.findViewById(R.id.reply_btn);
     }
 
-    public void bind(int MainCommentIndex, CommentsDataModel data)
+    public void bind(long MainCommentTimestamp, int MainCommentIndex, CommentsDataModel data)
     {
         this.data = data;
+        this.MainCommentTimestamp = MainCommentTimestamp;
         this.MainCommentIndex = MainCommentIndex;
 
         userIcn.setImageResource(R.drawable.circle_border);
@@ -90,12 +93,15 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
 
     //Send Reply Broadcast Message to CommentsActivity
     private void sendReplyBroadcast() {
-        Intent i = new Intent();
-        i.setAction("reply");
-        Bundle bundle = i.getExtras();
+        Bundle bundle = new Bundle();
         bundle.putInt("commentState", CommentsActivity.REPLY_COMMENT);
         bundle.putBoolean("showKeyboard", true);
+        bundle.putLong("mainCommentTimestamp", data.getTimestamp());
         bundle.putInt("mainCommentIndex", MainCommentIndex);
-        itemView.getContext().sendBroadcast(i);
+        Intent i = new Intent();
+        i.setAction("reply");
+        i.putExtras(bundle);
+        LocalBroadcastManager.getInstance(itemView.getContext()).sendBroadcast(i);
     }
+
 }

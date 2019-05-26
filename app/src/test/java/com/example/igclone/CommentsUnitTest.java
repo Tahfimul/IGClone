@@ -1,6 +1,9 @@
 package com.example.igclone;
 
+import com.example.igclone.Comments.DataModel.ListItem;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -9,9 +12,10 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class CommentsUnitTest {
     @Test
-    public void addition_isCorrect() {
+    public void checkCommentsViews() {
+        ArrayList<ListItem> commentsViews = new ArrayList<>();
         assertEquals(4, 2 + 2);
     }
 }

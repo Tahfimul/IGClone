@@ -10,7 +10,7 @@ public class ProfilePhotoFeedData {
 
     public void initData()
     {
-        profilePhotoFeedDataset.add(new PhotoPostDataModel("1",R.drawable.user_icon_profile, "User_name_1",R.drawable.nyc, 0, 0, 0, true, false, "AnotherUser", 21, "David Dobrik", "IG is cool", 5, 1515024000));
+        profilePhotoFeedDataset.add(new PhotoPostDataModel("first",R.drawable.user_icon_profile, "User_name_1",R.drawable.nyc, 0, 0, 0, true, false, "AnotherUser", 21, "David Dobrik", "IG is cool", 5, 1515024000));
         profilePhotoFeedDataset.add(new PhotoPostDataModel("2",R.drawable.user_icon_profile, "User_name_1", R.drawable.nyc, 0, 0, 0, true, false, "AnotherUser", 21, "David Dobrik", "IG is cool", 5, 1556258445));
         profilePhotoFeedDataset.add(new PhotoPostDataModel("3",R.drawable.user_icon_profile, "User_name_1", R.drawable.nyc, 0, 0, 0, true, false, "AnotherUser", 21, "David Dobrik", "IG is cool", 5, 1556258445));
         profilePhotoFeedDataset.add(new PhotoPostDataModel("4",R.drawable.user_icon_profile, "User_name_1", R.drawable.nyc, 0, 0, 0, true, false, "AnotherUser", 21, "David Dobrik", "IG is cool", 5, 1556258445));

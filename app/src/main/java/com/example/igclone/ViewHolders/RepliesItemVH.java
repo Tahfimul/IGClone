@@ -24,10 +24,10 @@ public class RepliesItemVH extends RecyclerView.ViewHolder implements View.OnCli
         recyclerView = itemView.findViewById(R.id.recyclerView);
     }
 
-    public void bind(int MainCommentIndex, ArrayList<CommentsDataModel> data)
+    public void bind(long MainCommentTimestamp, int MainCommentIndex, ArrayList<CommentsDataModel> data)
     {
         recyclerView.setVisibility(View.GONE);
-        CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), data, MainCommentIndex);
+        CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), data, MainCommentTimestamp, MainCommentIndex);
         viewRepliesBtn.setOnClickListener(this);
     }
 
@@ -47,5 +47,10 @@ public class RepliesItemVH extends RecyclerView.ViewHolder implements View.OnCli
                 isViewing = true;
             }
         }
+    }
+
+    public RecyclerView getRecyclerView()
+    {
+        return recyclerView;
     }
 }
