@@ -14,7 +14,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import com.example.igclone.Adapters.CommentsRecyclerADAPTER;
 import com.example.igclone.Adapters.CommentsRecyclerAdapter;
 import com.example.igclone.Adapters.RepliesItemAdapter;
 import com.example.igclone.Comments.Data;
@@ -22,7 +21,6 @@ import com.example.igclone.DB.PostDB;
 import com.example.igclone.DataModel.CommentsDataModel;
 import com.example.igclone.Comments.DataModel.ListItem;
 import com.example.igclone.LiveData.CommentsLiveDATA;
-import com.example.igclone.LiveData.CommentsLiveData;
 import com.example.igclone.R;
 
 import java.util.ArrayList;
@@ -37,11 +35,6 @@ public class CommentsUtil extends ViewModel {
 
     private static PostDB postDB = new PostDB();
 
-//    public MutableLiveData<ArrayList<ListItem>> retrieveCommentItems(String postId)
-//    {
-//        return new CommentsLiveData(postId);
-//    }
-
     public MutableLiveData<TreeMap<String, ListItem>> retrieveCommentItems(String postId)
     {
         return new CommentsLiveDATA(postId);
@@ -49,8 +42,7 @@ public class CommentsUtil extends ViewModel {
 
     public static void initCommentsRecycler(RecyclerView recyclerView, Context ctx)
     {
-//        System.out.println(getListItems().size()+"ListItems Size");
-        System.out.println(getListITEMS().size()+"ListItems Size");
+        System.out.println(getListItems().size()+"ListItems Size");
         if (!dataInitialized)
         {
             System.out.println("init Reycler ran");
@@ -61,8 +53,7 @@ public class CommentsUtil extends ViewModel {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-//        CommentsRecyclerAdapter adapter = new CommentsRecyclerAdapter(getListItems());
-        CommentsRecyclerADAPTER adapter = new CommentsRecyclerADAPTER(getListITEMS());
+        CommentsRecyclerAdapter adapter = new CommentsRecyclerAdapter(getListItems());
         recyclerView.setAdapter(adapter);
     }
 
@@ -91,28 +82,11 @@ public class CommentsUtil extends ViewModel {
         recyclerView.setAdapter(adapter);
     }
 
-//    public static void setListItems(TreeMap<Long, ListItem> listItems) {
-//        CommentsUtil.listItems = listItems;
-//    }
-
-//    public static TreeMap<Long, ListItem> getListItems() {
-//        return listItems;
-//    }
-
-//    public static void setListItems(ArrayList<ListItem> listItems) {
-//        CommentsUtil.listItems = listItems;
-//    }
-
-    public static void setListITEMS(TreeMap<String, ListItem> listItems) {
+    public static void setListItems(TreeMap<String, ListItem> listItems) {
         CommentsUtil.listITEMS= listItems;
     }
 
-//    public static ArrayList<ListItem> getListItems() {
-//        return listItems;
-//    }
-
-
-    public static TreeMap<String, ListItem> getListITEMS() {
+    public static TreeMap<String, ListItem> getListItems() {
         return listITEMS;
     }
 
@@ -123,7 +97,6 @@ public class CommentsUtil extends ViewModel {
 
     public static ArrayList<CommentsDataModel> getRepliesData()
     {
-
         return data.getRepliesData();
     }
 

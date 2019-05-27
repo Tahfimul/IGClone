@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.*;
-import com.example.igclone.Adapters.CommentsRecyclerADAPTER;
 import com.example.igclone.Adapters.CommentsRecyclerAdapter;
 import com.example.igclone.Adapters.RepliesItemAdapter;
 import com.example.igclone.DataModel.CommentsDataModel;
@@ -83,35 +82,17 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     private void setUpRecycler() {
         CommentsUtil viewModel = ViewModelProviders.of(this).get(CommentsUtil.class);
 
-//        viewModel.retrieveCommentItems(POST_ID).observe(this, new Observer<ArrayList<ListItem>>() {
-//            @Override
-//            public void onChanged(@Nullable ArrayList<ListItem> listItems) {
-//                CommentsUtil.setListItems(listItems);
-//                CommentsUtil.initCommentsRecycler(commentsRecycler, getApplicationContext());
-//                shareBtn.setVisibility(View.VISIBLE);
-//                shareBtn.setOnClickListener(CommentsActivity.this);
-//                postBtn.setOnClickListener(CommentsActivity.this);
-//            }
-////            @Override
-////            public void onChanged(@Nullable TreeMap<Long, ListItem> listItems) {
-////
-////                System.out.println("Received ListItems Size "+listItems.size());
-////                CommentsUtil.setListItems(listItems);
-////                CommentsUtil.initCommentsRecycler(commentsRecycler, getApplicationContext());
-////            }
-//        });
-
         viewModel.retrieveCommentItems(POST_ID).observe(this, new Observer<TreeMap<String, ListItem>>() {
             @Override
             public void onChanged(@Nullable TreeMap<String, ListItem> listItems) {
 
                 //If CommentsRecycler has been initialized
                 if(isInitialized)
-                    ((CommentsRecyclerADAPTER) commentsRecycler.getAdapter()).updatePreDataset(listItems);
+                    ((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).updatePreDataset(listItems);
                 else
                 {
                     isInitialized = true;
-                    CommentsUtil.setListITEMS(listItems);
+                    CommentsUtil.setListItems(listItems);
                     CommentsUtil.initCommentsRecycler(commentsRecycler, getApplicationContext());
                     shareBtn.setVisibility(View.VISIBLE);
                     shareBtn.setOnClickListener(CommentsActivity.this);
@@ -154,34 +135,35 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.post_btn:
                 main_comment_comment = commentInput.getText().toString();
-//                if (((CommentsRecyclerADAPTER)commentsRecycler.getAdapter()).getDataset().get(main_comment_index+1).getType()!=REPLY_COMMENT)
-//                {
-//                    System.out.println(main_comment_index + "Main Comment Index");
-//                    ArrayList<CommentsDataModel> data = new ArrayList<CommentsDataModel>();
-//                    data.add(new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0));
-//                    RepliesItem repliesItem = new RepliesItem(CommentsUtil.getCurrentTime(), data);
-//                    repliesItem.setMainItemPos(main_comment_index);
-//                    if(!newItemAdded) {
-//                        ((CommentsRecyclerADAPTER) commentsRecycler.getAdapter()).addItemAtPosition(main_comment_index + 1, repliesItem);
-//                        newItemAdded = true;
-//                    }
-//                    else
-//                        ((CommentsRecyclerADAPTER) commentsRecycler.getAdapter()).addItemAtPosition(main_comment_index + 1, repliesItem);
-//
-//                }
-//                else {
                     if (curr_comment_state == MAIN_COMMENT) {
                         CommentsUtil.updateMainComment(POST_ID, CommentsUtil.getCurrentTime(), main_comment_comment);
-//                    ((CommentsRecyclerADAPTER) commentsRecycler.getAdapter()).updateDataset(CommentsUtil.getCurrentTime(), new MainItem(CommentsUtil.getCurrentTime(), new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0)));
-                        ((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).updateDataset(new MainItem(CommentsUtil.getCurrentTime(), new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0)));
+                        ((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).updatePreDataset(new MainItem(CommentsUtil.getCurrentTime(), new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0)));
                     } else {
                         CommentsUtil.updateReplyComment(POST_ID, main_comment_timestamp, CommentsUtil.getCurrentTime(), main_comment_comment);
                         System.out.println(main_comment_index + "Main Comment Index for  Reply");
-//                    ((RepliesItemAdapter)((RepliesItemVH)((RepliesItem)((CommentsRecyclerADAPTER) commentsRecycler.getAdapter()).getDatasetListItem(main_comment_timestamp)).getRepliesViewHolder()).getRecyclerView().getAdapter()).updateDataset(new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0));
-//                    ((RepliesItemAdapter)((RepliesItemVH)((RepliesItem)((CommentsRecyclerADAPTER)commentsRecycler.getAdapter()).getDatasetListItem(main_comment_index+1)).getRepliesVH().getRecyclerView().getAdapter()))
-                        ((RepliesItemAdapter) ((RepliesItemVH) ((RepliesItem) ((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).getDatasetListItem(main_comment_index + 1)).getRepliesVH()).getRecyclerView().getAdapter()).updateDataset(new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0));
+
+
+
+                        System.out.println("-------------------------Printing Comments Recycler Adapter dataset from Comments Activity---------------");
+                        for(int i = 0; i<((CommentsRecyclerAdapter)commentsRecycler.getAdapter()).getDataset().size(); i++)
+                            System.out.println(((CommentsRecyclerAdapter)commentsRecycler.getAdapter()).getDataset().get(i));
+                        System.out.println("---------------------------------------------------------------------------------------------------------");
+
+                        System.out.println("Curr main comment timestamp "+ main_comment_timestamp + "R");
+                        //If replies item for main comment does not exist
+                        if(!((CommentsRecyclerAdapter)commentsRecycler.getAdapter()).getDataset().contains(main_comment_timestamp+"R"))
+                        {
+                            System.out.println("Comments Dataset does not have replies item in CommentsActivity");
+                            ArrayList<CommentsDataModel> replies = new ArrayList<>();
+                            replies.add(new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0));
+                            ((CommentsRecyclerAdapter)commentsRecycler.getAdapter()).updatePreDataset(new RepliesItem(main_comment_timestamp, replies));
+
+                        }
+                        else {
+                            System.out.println(((RepliesItem) ((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).getDatasetListItem(((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).getDataset().indexOf(main_comment_timestamp+"R"))).getMainCommentTimestamp()+"Printing main comment timestamp of replies item from Comments Activity");
+                            ((RepliesItemAdapter) ((RepliesItemVH) ((RepliesItem) ((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).getDatasetListItem(((CommentsRecyclerAdapter) commentsRecycler.getAdapter()).getDataset().indexOf(main_comment_timestamp + "R"))).getRepliesVH()).getRecyclerView().getAdapter()).updateDataset(new CommentsDataModel("abc", "username", main_comment_comment, false, CommentsUtil.getCurrentTime(), 0));
+                        }
                     }
-//                }
                 commentInput.setText("");
                 break;
         }
@@ -202,6 +184,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
+            finish();
             super.onBackPressed();
     }
 
