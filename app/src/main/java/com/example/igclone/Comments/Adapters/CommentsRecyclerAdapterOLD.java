@@ -1,4 +1,4 @@
-package com.example.igclone.Adapters;
+package com.example.igclone.Comments.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,12 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.igclone.Comments.DataModel.ListItem;
-import com.example.igclone.Comments.DataModel.MainItem;
-import com.example.igclone.Comments.DataModel.RepliesItem;
+import com.example.igclone.Comments.ViewHolders.RepliesContainerVH;
 import com.example.igclone.R;
-import com.example.igclone.Util.CommentsUtil;
-import com.example.igclone.ViewHolders.MainItemVH;
-import com.example.igclone.ViewHolders.RepliesItemVH;
+import com.example.igclone.Comments.ViewHolders.MainItemVH;
 
 import java.util.*;
 
@@ -20,7 +17,7 @@ public class CommentsRecyclerAdapterOLD extends RecyclerView.Adapter {
     private ArrayList<ListItem> dataset;
     //    private TreeMap<Long, ListItem> dataset;
     private MainItemVH mainItemVH;
-    private RepliesItemVH repliesItemVH;
+    private RepliesContainerVH repliesContainerVH;
 
     public CommentsRecyclerAdapterOLD(ArrayList<ListItem> dataset)
     {
@@ -93,61 +90,61 @@ public class CommentsRecyclerAdapterOLD extends RecyclerView.Adapter {
         {
             System.out.println("Position "+i+" Setting type Reply");
             View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_replies, viewGroup, false);
-            return new RepliesItemVH(itemView);
+            return new RepliesContainerVH(itemView);
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
-        int type = getItemViewType(i);
-        if (type == ListItem.TYPE_MAIN) {
-//            ArrayList<Long> keys = new ArrayList<>(dataset.keySet());
-//            final MainItem mainItem = (MainItem) dataset.get(keys.get(i));
-            final MainItem mainItem = (MainItem) dataset.get(i);
-            System.out.println(mainItem.getMainData().getComment()+"Main Item Position"+i);
-            mainItemVH = (MainItemVH) viewHolder;
-            mainItemVH.bind(mainItem.getMainCommentTimestamp(), mainItem.getMainItemPos(), mainItem.getMainData());
-            mainItemVH.likeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mainItem.getMainData().isLiked())
-                    {
-                        CommentsUtil.likeBtnUnlikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
-                        mainItem.getMainData().decrementLikeCount();
-                        mainItem.getMainData().setLiked(false);
-                    }
-                    else {
-                        CommentsUtil.likeBtnLikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
-                        mainItem.getMainData().incrementLikeCount();
-                        mainItem.getMainData().setLiked(true);
-                    }
-
-                    CommentsUtil.setMainData(mainItem.getMainData());
-                    notifyItemChanged(dataset.indexOf(mainItem));
-//                    int pos=0;
-//                    for(Long key:dataset.keySet())
+//        int type = getItemViewType(i);
+//        if (type == ListItem.TYPE_MAIN) {
+////            ArrayList<Long> keys = new ArrayList<>(dataset.keySet());
+////            final Main mainItem = (Main) dataset.get(keys.get(i));
+//            final MainItem mainItem = (MainItem) dataset.get(i);
+//            System.out.println(mainItem.getMainData().getComment()+"Main Item Position"+i);
+//            mainItemVH = (MainItemVH) viewHolder;
+//            mainItemVH.bind(mainItem.getMainCommentTimestamp(), mainItem.getMainItemPos(), mainItem.getMainData());
+//            mainItemVH.likeBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(mainItem.getMainData().isLiked())
 //                    {
-//                        if (dataset.get(key)==mainItem) {
-//                            notifyItemChanged(pos);
-//                            break;
-//                        }
-//                        pos++;
+//                        CommentsUtil.likeBtnUnlikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
+//                        mainItem.getMainData().decrementLikeCount();
+//                        mainItem.getMainData().setLiked(false);
 //                    }
-
-                }
-            });
-        }
-        if (type == ListItem.TYPE_REPLIES){
-//            ArrayList<Long> keys = new ArrayList<>(dataset.keySet());
-//            RepliesItem repliesItem = (RepliesItem) dataset.get(keys.get(i));
-            RepliesItem repliesItem = (RepliesItem) dataset.get(i);
-            System.out.println(repliesItem.getRepliesArrayData().get(0).getComment()+" REply Item");
-            repliesItemVH = (RepliesItemVH) viewHolder;
-            repliesItem.setRepliesVH(repliesItemVH);
-            repliesItemVH.bind(repliesItem.getMainCommentTimestamp(), repliesItem.getMainItemPos(), repliesItem.getRepliesArrayData());
-
-        }
+//                    else {
+//                        CommentsUtil.likeBtnLikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
+//                        mainItem.getMainData().incrementLikeCount();
+//                        mainItem.getMainData().setLiked(true);
+//                    }
+//
+//                    CommentsUtil.setMainData(mainItem.getMainData());
+//                    notifyItemChanged(dataset.indexOf(mainItem));
+////                    int pos=0;
+////                    for(Long key:dataset.keySet())
+////                    {
+////                        if (dataset.get(key)==mainItem) {
+////                            notifyItemChanged(pos);
+////                            break;
+////                        }
+////                        pos++;
+////                    }
+//
+//                }
+//            });
+//        }
+//        if (type == ListItem.TYPE_REPLIES){
+////            ArrayList<Long> keys = new ArrayList<>(dataset.keySet());
+////            ReplyItem replyItem = (ReplyItem) dataset.get(keys.get(i));
+//            ReplyItem replyItem = (ReplyItem) dataset.get(i);
+//            System.out.println(replyItem.getRepliesArrayData().get(0).getComment()+" REply Item");
+//            repliesContainerVH = (RepliesContainerVH) viewHolder;
+//            replyItem.setRepliesVH(repliesContainerVH);
+//            repliesContainerVH.bind(replyItem.getMainCommentTimestamp(), replyItem.getMainItemPos(), replyItem.getRepliesArrayData());
+//
+//        }
     }
 
     @Override

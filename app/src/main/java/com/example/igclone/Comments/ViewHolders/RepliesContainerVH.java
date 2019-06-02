@@ -1,33 +1,35 @@
-package com.example.igclone.ViewHolders;
+package com.example.igclone.Comments.ViewHolders;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.example.igclone.DataModel.CommentsDataModel;
+import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapterNEW;
+import com.example.igclone.Comments.DataModel.ReplyItem;
 import com.example.igclone.R;
-import com.example.igclone.Util.CommentsUtil;
+import com.example.igclone.Comments.Util.CommentsUtil;
 
 import java.util.ArrayList;
 
-public class RepliesItemVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class RepliesContainerVH extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView viewRepliesBtn;
     private boolean isViewing;
     private RecyclerView recyclerView;
+    private RepliesContainerRecyclerAdapterNEW adapter;
 
-    public RepliesItemVH(@NonNull View itemView) {
+    public RepliesContainerVH(@NonNull View itemView) {
         super(itemView);
         viewRepliesBtn = itemView.findViewById(R.id.view_replies_btn);
         isViewing = false;
         recyclerView = itemView.findViewById(R.id.recyclerView);
     }
 
-    public void bind(long MainCommentTimestamp, int MainCommentIndex, ArrayList<CommentsDataModel> data)
+    public void bind(ArrayList<ReplyItem> data)
     {
         recyclerView.setVisibility(View.GONE);
-        CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), data, MainCommentTimestamp, MainCommentIndex);
+        CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), data);
+        adapter = (RepliesContainerRecyclerAdapterNEW) recyclerView.getAdapter();
         viewRepliesBtn.setOnClickListener(this);
     }
 
@@ -47,6 +49,11 @@ public class RepliesItemVH extends RecyclerView.ViewHolder implements View.OnCli
                 isViewing = true;
             }
         }
+    }
+
+    public void updateContainerRecyclerDataset(ReplyItem replyItem)
+    {
+        adapter.updateDataset(replyItem);
     }
 
     public RecyclerView getRecyclerView()

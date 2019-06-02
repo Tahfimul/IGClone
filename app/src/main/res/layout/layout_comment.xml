@@ -3,11 +3,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:padding="10dp"
-                android:background="@android:color/white">
+                android:background="@android:color/white"
+                android:id="@+id/relativeLayout">
 
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:tag="circleBorder"
             android:src="@drawable/circle_border"
             android:id="@+id/user_icon"
             android:layout_gravity="center_vertical"/>
@@ -32,7 +34,7 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/like_btn"
             app:srcCompat="@drawable/ic_interactions"
-            android:background="@android:color/white"/>
+            android:background="@android:color/transparent"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -50,7 +52,7 @@
             android:layout_below="@id/comment_txt"
             android:layout_toRightOf="@id/timestamp"
             android:layout_marginStart="20dp"
-            android:background="@android:color/white"
+            android:background="@android:color/transparent"
             android:text="likes"
             android:textColor="@android:color/black"
             android:id="@+id/likes_count"
@@ -62,7 +64,7 @@
             android:layout_below="@id/comment_txt"
             android:layout_toRightOf="@id/likes_count"
             android:layout_marginStart="20dp"
-            android:background="@android:color/white"
+            android:background="@android:color/transparent"
             android:text="Reply"
             android:textColor="@android:color/black"
             android:id="@+id/reply_btn"

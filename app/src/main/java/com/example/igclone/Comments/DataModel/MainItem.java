@@ -1,14 +1,10 @@
 package com.example.igclone.Comments.DataModel;
 
-import com.example.igclone.DataModel.CommentsDataModel;
-import com.example.igclone.ViewHolders.RepliesItemVH;
+import com.example.igclone.Comments.Interfaces.Main;
 
-import java.util.ArrayList;
-
-public class MainItem extends ListItem {
+public class MainItem extends ListItem implements Main {
 
     private long MainCommentTimestamp;
-    private int MainItemPos;
 
     private CommentsDataModel data;
 
@@ -29,24 +25,9 @@ public class MainItem extends ListItem {
     }
 
     @Override
-    public void setMainItemPos(int mainItemPos) {
-        MainItemPos = mainItemPos;
-    }
-
-    @Override
-    public int getMainItemPos() {
-        return MainItemPos;
-    }
-
-    @Override
     public void setMainData(CommentsDataModel data)
     {
         this.data = data;
-    }
-
-    @Override
-    public void setRepliesArrayData(ArrayList<CommentsDataModel> data) {
-
     }
 
     @Override
@@ -55,22 +36,7 @@ public class MainItem extends ListItem {
     }
 
     @Override
-    public ArrayList<CommentsDataModel> getRepliesArrayData() {
-        return null;
-    }
-
-    @Override
-    public RepliesItemVH getRepliesVH() {
-        return null;
-    }
-
-    @Override
-    public void setRepliesVH(RepliesItemVH repliesVH) {
-
-    }
-
-    @Override
     public int getType() {
-        return 0;
+        return TYPE_MAIN;
     }
 }

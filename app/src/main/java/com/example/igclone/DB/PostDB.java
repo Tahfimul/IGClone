@@ -1,39 +1,41 @@
 package com.example.igclone.DB;
 
-import android.arch.lifecycle.ViewModel;
+import com.example.igclone.Comments.Util.CommentsUtil;
 import com.google.firebase.database.*;
 
-public class PostDB extends ViewModel {
-    DatabaseReference mCommentsRef = FirebaseDatabase.getInstance().getReference("/Comments");
-
-    public void retrieveAllPosts()
-    {
-
-    }
-
-    public void makePost()
-    {
-
-    }
-
-    public void postMainComment(String postId, long timestamp, String comment)
-    {
-        mCommentsRef.child(postId).child("MainComments").child(String.valueOf(timestamp)).child("comment").setValue(comment);
-        mCommentsRef.child(postId).child("MainComments").child(String.valueOf(timestamp)).child("likeCount").setValue(0);
-        mCommentsRef.child(postId).child("MainComments").child(String.valueOf(timestamp)).child("liked").setValue(false);
-        mCommentsRef.child(postId).child("MainComments").child(String.valueOf(timestamp)).child("timestamp").setValue(timestamp);
-        mCommentsRef.child(postId).child("MainComments").child(String.valueOf(timestamp)).child("userIconSrc").setValue("abc");
-        mCommentsRef.child(postId).child("MainComments").child(String.valueOf(timestamp)).child("username").setValue("username");
-    }
-
-    public void postReplyComment(String postId, long mainCommentTimestamp, long timestamp, String comment)
-    {
-        mCommentsRef.child(postId).child("ReplyComments").child(String.valueOf(mainCommentTimestamp)).child(String.valueOf(timestamp)).child("comment").setValue(comment);
-        mCommentsRef.child(postId).child("ReplyComments").child(String.valueOf(mainCommentTimestamp)).child(String.valueOf(timestamp)).child("likeCount").setValue(0);
-        mCommentsRef.child(postId).child("ReplyComments").child(String.valueOf(mainCommentTimestamp)).child(String.valueOf(timestamp)).child("liked").setValue(false);
-        mCommentsRef.child(postId).child("ReplyComments").child(String.valueOf(mainCommentTimestamp)).child(String.valueOf(timestamp)).child("timestamp").setValue(timestamp);
-        mCommentsRef.child(postId).child("ReplyComments").child(String.valueOf(mainCommentTimestamp)).child(String.valueOf(timestamp)).child("userIconSrc").setValue("abc");
-        mCommentsRef.child(postId).child("ReplyComments").child(String.valueOf(mainCommentTimestamp)).child(String.valueOf(timestamp)).child("username").setValue("username");
-    }
+public class PostDB {
+//    DatabaseReference mCommentsRef = FirebaseDatabase.getInstance().getReference("/Comments");
+//
+//    public void retrieveAllPosts()
+//    {
+//
+//    }
+//
+//    public void makePost()
+//    {
+//
+//    }
+//
+//    public void postMainComment(String postId, String comment)
+//    {
+//        DatabaseReference mMainCommentsRef = mCommentsRef.child(postId).child("MainComments").child(String.valueOf(CommentsUtil.getCurrentTime()));
+//        mMainCommentsRef.child("comment").setValue(comment);
+//        mMainCommentsRef.child("likeCount").setValue(0);
+//        mMainCommentsRef.child("liked").setValue(false);
+//        mMainCommentsRef.child("timestamp").setValue(CommentsUtil.getCurrentTime());
+//        mMainCommentsRef.child("userIconSrc").setValue("abc");
+//        mMainCommentsRef.child("username").setValue("username");
+//    }
+//
+//    public void postReplyComment(String postId, String replyContainerTimestamp, String comment)
+//    {
+//        DatabaseReference mReplyCommentsRef = mCommentsRef.child(postId).child("ReplyComments").child(replyContainerTimestamp).child(String.valueOf(CommentsUtil.getCurrentTime()));
+//        mReplyCommentsRef.child("comment").setValue(comment);
+//        mReplyCommentsRef.child("likeCount").setValue(0);
+//        mReplyCommentsRef.child("liked").setValue(false);
+//        mReplyCommentsRef.child("timestamp").setValue(CommentsUtil.getCurrentTime());
+//        mReplyCommentsRef.child("userIconSrc").setValue("abc");
+//        mReplyCommentsRef.child("username").setValue("username");
+//    }
 
 }

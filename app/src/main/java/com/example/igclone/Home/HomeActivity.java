@@ -3,12 +3,9 @@ package com.example.igclone.Home;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import com.example.igclone.Fragments.SendToUser;
 import com.example.igclone.Home.Adapters.HomePagerAdapter;
 import com.example.igclone.R;
 

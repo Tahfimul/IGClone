@@ -1,7 +1,6 @@
 package com.example.igclone.Comments;
 
-import com.example.igclone.DataModel.CommentsDataModel;
-import com.example.igclone.R;
+import com.example.igclone.Comments.DataModel.CommentsDataModel;
 
 import java.util.ArrayList;
 

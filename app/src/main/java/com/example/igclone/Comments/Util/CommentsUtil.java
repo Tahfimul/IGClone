@@ -1,4 +1,4 @@
-package com.example.igclone.Util;
+package com.example.igclone.Comments.Util;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -8,20 +8,26 @@ import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import com.example.igclone.Adapters.CommentsRecyclerAdapter;
-import com.example.igclone.Adapters.RepliesItemAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.example.igclone.Comments.Adapters.CommentsRecyclerAdapter;
+import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapterNEW;
+import com.example.igclone.Comments.CommentsActivity;
+import com.example.igclone.Comments.DB.CommentsPostDB;
 import com.example.igclone.Comments.Data;
-import com.example.igclone.DB.PostDB;
-import com.example.igclone.DataModel.CommentsDataModel;
-import com.example.igclone.Comments.DataModel.ListItem;
-import com.example.igclone.LiveData.CommentsLiveDATA;
+import com.example.igclone.Comments.DataModel.*;
+import com.example.igclone.Comments.LiveData.CommentsLiveDATA;
 import com.example.igclone.R;
+import com.example.igclone.Util.BoldTextClickableSpan;
+import com.example.igclone.Util.NormalTextClickableSpan;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -31,16 +37,17 @@ public class CommentsUtil extends ViewModel {
     private static boolean dataInitialized =false;
     private static Data data = new Data();
     private static TreeMap<String, ListItem> listITEMS = new TreeMap<>();
-    private static ArrayList<ListItem> listItems = new ArrayList<>();
 
-    private static PostDB postDB = new PostDB();
+    private static CommentsPostDB postDB;
+
+    private static CommentsRecyclerAdapter adapter;
 
     public MutableLiveData<TreeMap<String, ListItem>> retrieveCommentItems(String postId)
     {
         return new CommentsLiveDATA(postId);
     }
 
-    public static void initCommentsRecycler(RecyclerView recyclerView, Context ctx)
+    public static void initCommentsRecycler(RecyclerView recyclerView, Context ctx, String postId)
     {
         System.out.println(getListItems().size()+"ListItems Size");
         if (!dataInitialized)
@@ -53,8 +60,149 @@ public class CommentsUtil extends ViewModel {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-        CommentsRecyclerAdapter adapter = new CommentsRecyclerAdapter(getListItems());
+        adapter = new CommentsRecyclerAdapter();
         recyclerView.setAdapter(adapter);
+
+        postDB = new CommentsPostDB(postId);
+    }
+
+    public static void postMainComment(String comment)
+    {
+        postDB.postMainComment(comment);
+    }
+
+    public static void postReplyComment(String replyContainerTimestamp, String comment)
+    {
+        postDB.postReplyComment(replyContainerTimestamp, comment);
+    }
+
+    public static void replyCommentLikeInteraction(String replyContainerTimestamp, long replyCommentTimestamp, boolean liked, int likeCount)
+    {
+        postDB.replyCommentLikeInteraction(replyContainerTimestamp, replyCommentTimestamp, liked, likeCount);
+    }
+
+    public static void mainCommentLikeInteraction(long mainCommentTimestamp, boolean liked, int likeCount)
+    {
+        postDB.mainCommentLikeInteraction(mainCommentTimestamp, liked, likeCount);
+    }
+
+//    public static void setMainCommentItemSelected(Context ctx, String currSelectedCommentItemTimestamp, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+//    {
+//        //Get current firebaseUser Username
+//        String curr_username = "username";
+//
+//        if (((MainItem)adapter.getDatasetListItem(currSelectedCommentItemTimestamp)).getMainData().getUsername().equals(curr_username))
+//            setCurrUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
+//        else
+//            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
+//    }
+//
+//    public static void setMainCommentItemUnSelected(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+//    {
+//        setDefaultToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
+//    }
+//
+//    public static void setReplyCommentItemSelected(Context ctx, String selectedReplyCommentItemContainerTimestamp, String currSelectedCommentItemTimestamp, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+//    {
+//        //Get current firebaseUser Username
+//        String curr_username = "username";
+//
+//        if(((ReplyItem)((RepliesContainerItem)adapter.getDatasetListItem(selectedReplyCommentItemContainerTimestamp)).getReplyItem(currSelectedCommentItemTimestamp)).getReplyData().getUsername().equals(curr_username))
+//            setCurrUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
+//        else
+//            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
+//    }
+//
+//    public static void setReplyCommentItemUnSelected(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+//    {
+//        setDefaultToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
+//    }
+
+    public static void showItemSelectedToolbar(Context ctx, int itemType, String itemTimestamp, String itemContainerTimestamp, Toolbar toolbar, ImageButton leftBtn, TextView title, ImageButton rightBtn)
+    {
+        switch (itemType)
+        {
+            case CommentsActivity.MAIN_COMMENT:
+                setMainItemSelectedToolbar(ctx, itemTimestamp, toolbar, leftBtn, title, rightBtn);
+                break;
+            case CommentsActivity.REPLY_COMMENT:
+                setReplyItemSelectedToolbar(ctx, itemTimestamp, itemContainerTimestamp, toolbar, leftBtn, title, rightBtn);
+                break;
+        }
+    }
+
+    private static void setMainItemSelectedToolbar(Context ctx, String itemTimestamp, Toolbar toolbar, ImageButton leftBtn, TextView title, ImageButton rightBtn)
+    {
+        MainItem mainItem = (MainItem) adapter.getDatasetListItem(itemTimestamp);
+
+        String itemUsername = mainItem.getMainData().getUsername();
+
+        String dummyUsername = "username";
+
+        if(itemUsername.equals(dummyUsername))
+            setCurrUserItemSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+        else
+            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+    }
+
+    private static void setReplyItemSelectedToolbar(Context ctx, String itemTimestamp, String itemContainerTimestamp, Toolbar toolbar, ImageButton leftBtn, TextView title, ImageButton rightBtn)
+    {
+        RepliesContainerItem replyContainerItem = (RepliesContainerItem) adapter.getDatasetListItem(itemContainerTimestamp);
+
+        ReplyItem replyItem = replyContainerItem.getReplyItem(itemTimestamp);
+
+        String itemUsername = replyItem.getReplyData().getUsername();
+
+        String dummyUsername = "username";
+
+        if(itemUsername.equals(dummyUsername))
+            setCurrUserItemSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+        else
+            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+    }
+
+    private static void setCurrUserItemSelectedToolbarConfig(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+    {
+        Toast.makeText(ctx, "Curr User Comment Selected Toolbar Config", Toast.LENGTH_SHORT).show();
+        toolbar.setBackgroundResource(R.color.colorIGBlue);
+        backBtn.setImageResource(R.drawable.ic_close_white);
+        Toast.makeText(ctx, commentsTitle.getText(), Toast.LENGTH_SHORT).show();
+        commentsTitle.setText("1 Selected");
+        commentsTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
+        shareBtn.setImageResource(R.drawable.ic_delete_white);
+    }
+
+    private static void setOtherUserCommentSelectedToolbarConfig(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+    {
+        toolbar.setBackgroundResource(R.color.colorIGBlue);
+        backBtn.setImageResource(R.drawable.ic_close_white);
+        commentsTitle.setText("1 Selected");
+        commentsTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
+        shareBtn.setImageResource(R.drawable.ic_info_white);
+    }
+
+    public static void showDefaultToolbar(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+    {
+        toolbar.setBackgroundResource(android.R.color.white);
+        backBtn.setImageResource(R.drawable.ic_back);
+        commentsTitle.setText("Comments");
+        commentsTitle.setTextColor(ctx.getResources().getColor(android.R.color.black, null));
+        shareBtn.setImageResource(R.drawable.ic_share);
+    }
+
+    public static void updateCommentsRecyclerDataset(TreeMap<String, ListItem> items)
+    {
+        adapter.updatePreDataset(items);
+    }
+
+    public static String getReplyingToUsernameFromMain(String replyingToTimestamp)
+    {
+        return ((MainItem)adapter.getDatasetListItem(replyingToTimestamp)).getMainData().getUsername();
+    }
+
+    public static String getReplyingToUsernameFromReplyContainer(String replyContainerTimestamp, String replyingToTimestamp)
+    {
+        return ((RepliesContainerItem)adapter.getDatasetListItem(replyContainerTimestamp)).getReplyItem(replyingToTimestamp).getReplyData().getUsername();
     }
 
     public static void showKeyboard(View view)
@@ -72,13 +220,13 @@ public class CommentsUtil extends ViewModel {
     }
 
 
-    public static void initRepliesItemRecycler(RecyclerView recyclerView, Context ctx, ArrayList<CommentsDataModel> data, long MainCommentTimestamp, int MainCommentIndex)
+    public static void initRepliesItemRecycler(RecyclerView recyclerView, Context ctx, ArrayList<ReplyItem> data)
     {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-        RepliesItemAdapter adapter = new RepliesItemAdapter(MainCommentTimestamp, MainCommentIndex, data);
+        RepliesContainerRecyclerAdapterNEW adapter = new RepliesContainerRecyclerAdapterNEW(data);
         recyclerView.setAdapter(adapter);
     }
 
@@ -235,7 +383,7 @@ public class CommentsUtil extends ViewModel {
             time *= 1000;
         }
 
-        long now = getCurrentTime();
+        long now = getCurrentTime()*1000L;
         if (time > now || time <= 0) {
 
             System.out.println(now+" time returning"+time);
@@ -265,16 +413,6 @@ public class CommentsUtil extends ViewModel {
 
     public static long getCurrentTime()
     {
-        return System.currentTimeMillis();
-    }
-
-    public static void updateMainComment(String postId, long timestamp, String comment)
-    {
-        postDB.postMainComment(postId, timestamp, comment);
-    }
-
-    public static void updateReplyComment(String postId, long mainCommentTimestamp, long timestamp, String comment)
-    {
-        postDB.postReplyComment(postId, mainCommentTimestamp, timestamp, comment);
+        return System.currentTimeMillis()/1000L;
     }
 }

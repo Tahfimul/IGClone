@@ -1,24 +1,24 @@
-package com.example.igclone.Adapters;
+package com.example.igclone.Comments.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.example.igclone.DataModel.CommentsDataModel;
+import com.example.igclone.Comments.DataModel.CommentsDataModel;
 import com.example.igclone.R;
-import com.example.igclone.Util.CommentsUtil;
-import com.example.igclone.ViewHolders.MainItemVH;
+import com.example.igclone.Comments.Util.CommentsUtil;
+import com.example.igclone.Comments.ViewHolders.MainItemVH;
 
 import java.util.ArrayList;
 
-public class RepliesItemAdapter extends RecyclerView.Adapter {
+public class RepliesContainerRecyclerAdapterOLD extends RecyclerView.Adapter {
 
     private long MainCommentTimestamp;
     private int MainCommentIndex;
     private ArrayList<CommentsDataModel> dataset;
 
-    public RepliesItemAdapter(long MainCommentTimestamp, int MainCommentIndex, ArrayList<CommentsDataModel> dataset)
+    public RepliesContainerRecyclerAdapterOLD(long MainCommentTimestamp, int MainCommentIndex, ArrayList<CommentsDataModel> dataset)
     {
         this.MainCommentTimestamp = MainCommentTimestamp;
         this.MainCommentIndex = MainCommentIndex;
@@ -43,7 +43,7 @@ public class RepliesItemAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
         final MainItemVH vh = (MainItemVH) viewHolder;
         final CommentsDataModel data = dataset.get(i);
-        vh.bind(MainCommentTimestamp, MainCommentIndex, dataset.get(i));
+//        vh.bind(MainCommentTimestamp, MainCommentIndex, dataset.get(i));
         vh.likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
