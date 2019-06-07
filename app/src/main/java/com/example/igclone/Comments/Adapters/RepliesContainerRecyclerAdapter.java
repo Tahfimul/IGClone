@@ -11,11 +11,11 @@ import com.example.igclone.R;
 
 import java.util.ArrayList;
 
-public class RepliesContainerRecyclerAdapterNEW extends RecyclerView.Adapter{
+public class RepliesContainerRecyclerAdapter extends RecyclerView.Adapter{
 
     private ArrayList<ReplyItem> dataset;
 
-    public RepliesContainerRecyclerAdapterNEW(ArrayList<ReplyItem> replyItems)
+    public RepliesContainerRecyclerAdapter(ArrayList<ReplyItem> replyItems)
     {
         dataset = replyItems;
     }
@@ -39,25 +39,6 @@ public class RepliesContainerRecyclerAdapterNEW extends RecyclerView.Adapter{
         final ReplyItemVH vh = (ReplyItemVH) viewHolder;
         final ReplyItem data = dataset.get(i);
         vh.bind(data);
-//        vh.likeBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(data.getReplyData().isLiked())
-//                {
-//                    CommentsUtil.likeBtnUnlikedInteractionAnimate(vh.likeBtn, vh.itemView.getContext());
-//                    data.getReplyData().decrementLikeCount();
-//                    data.setLiked(false);
-//                }
-//                else {
-//                    CommentsUtil.likeBtnLikedInteractionAnimate(vh.likeBtn, vh.itemView.getContext());
-//                    data.incrementLikeCount();
-//                    data.setLiked(true);
-//                }
-//                vh.likeCount.setText(data.getLikeCount()+" likes");
-//                CommentsUtil.setRepliesData(data);
-////                notifyDataSetChanged();
-//            }
-//        });
     }
 
     @Override

@@ -96,9 +96,9 @@ public class ReplyItemVH extends RecyclerView.ViewHolder implements View.OnClick
                 }
                 break;
             case R.id.reply_btn:
-                System.out.println(data.getReplyContainerTimestamp()+" Reply Comment Main Timestamp ReplyItemVH");
+//                System.out.println(data.getReplyContainerTimestamp()+" Reply Comment Main Timestamp ReplyItemVH");
                 sendReplyBroadcast();
-                Toast.makeText(itemView.getContext(), "Reply | Timestamp" + data.getReplyContainerTimestamp(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(itemView.getContext(), "Reply | Timestamp" + data.getReplyContainerTimestamp(), Toast.LENGTH_SHORT).show();
                 break;
 
         }
@@ -162,10 +162,10 @@ public class ReplyItemVH extends RecyclerView.ViewHolder implements View.OnClick
                 String itemTimestamp = intent.getExtras().getString("itemTimestamp");
 
 
-                System.out.println("res in ReplyItemVH "+ yes);
-                System.out.println("itemType received in ReplyItemVH "+itemType);
-                System.out.println("itemContainerTimestamp received in ReplyItemVH "+itemContainerTimestamp+" Equality "+itemContainerTimestamp.equals(data.getReplyContainerTimestamp()));
-                System.out.println("itemTimestamp received in ReplyItemVH "+itemTimestamp+" Equality "+itemTimestamp.equals(String.valueOf(data.getReplyCommentTimestamp())));
+//                System.out.println("res in ReplyItemVH "+ yes);
+//                System.out.println("itemType received in ReplyItemVH "+itemType);
+//                System.out.println("itemContainerTimestamp received in ReplyItemVH "+itemContainerTimestamp+" Equality "+itemContainerTimestamp.equals(data.getReplyContainerTimestamp()));
+//                System.out.println("itemTimestamp received in ReplyItemVH "+itemTimestamp+" Equality "+itemTimestamp.equals(String.valueOf(data.getReplyCommentTimestamp())));
 
                 if (yes && itemContainerTimestamp.equals(data.getReplyContainerTimestamp()) && itemTimestamp.equals(String.valueOf(data.getReplyCommentTimestamp()))) {
 
@@ -182,14 +182,14 @@ public class ReplyItemVH extends RecyclerView.ViewHolder implements View.OnClick
 
     private void setItemUnselected()
     {
-        System.out.println("Setting itemUnselected in replyItemVH");
+//        System.out.println("Setting itemUnselected in replyItemVH");
         mRelativeLayout.setBackgroundResource(android.R.color.white);
         isSelected = false;
     }
 
     private void setItemSelected()
     {
-        System.out.println("Setting itemSelected in replyItemVH");
+//        System.out.println("Setting itemSelected in replyItemVH");
         mRelativeLayout.setBackgroundResource(R.color.colorLightIGBlue);
         isSelected = true;
     }

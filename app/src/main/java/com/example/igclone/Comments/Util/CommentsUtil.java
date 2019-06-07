@@ -6,6 +6,9 @@ import android.animation.ObjectAnimator;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,10 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.igclone.Comments.Adapters.CommentsRecyclerAdapter;
-import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapterNEW;
+import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapter;
 import com.example.igclone.Comments.CommentsActivity;
 import com.example.igclone.Comments.DB.CommentsPostDB;
-import com.example.igclone.Comments.Data;
 import com.example.igclone.Comments.DataModel.*;
 import com.example.igclone.Comments.LiveData.CommentsLiveDATA;
 import com.example.igclone.R;
@@ -34,29 +36,28 @@ import java.util.TreeMap;
 
 public class CommentsUtil extends ViewModel {
 
-    private static boolean dataInitialized =false;
-    private static Data data = new Data();
-    private static TreeMap<String, ListItem> listITEMS = new TreeMap<>();
-
     private static CommentsPostDB postDB;
 
     private static CommentsRecyclerAdapter adapter;
+
+    //Comment Item Selected Vars
+    private static int curr_selected_item_type;
+    private static String curr_selected_Item_timestamp;
+    private static String curr_selected_item_container_timestamp;
+    private static boolean isItemSelected;
+    private static Context ctx;
+    private static Toolbar mToolbar;
+    private static ImageView mLeftBtn;
+    private static TextView mTitle;
+    private static ImageView mRightBtn;
 
     public MutableLiveData<TreeMap<String, ListItem>> retrieveCommentItems(String postId)
     {
         return new CommentsLiveDATA(postId);
     }
 
-    public static void initCommentsRecycler(RecyclerView recyclerView, Context ctx, String postId)
+    public static void initCommentsRecycler(RecyclerView recyclerView, String postId)
     {
-        System.out.println(getListItems().size()+"ListItems Size");
-        if (!dataInitialized)
-        {
-            System.out.println("init Reycler ran");
-            data.initData();
-            dataInitialized = true;
-        }
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -86,108 +87,218 @@ public class CommentsUtil extends ViewModel {
         postDB.mainCommentLikeInteraction(mainCommentTimestamp, liked, likeCount);
     }
 
-//    public static void setMainCommentItemSelected(Context ctx, String currSelectedCommentItemTimestamp, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
-//    {
-//        //Get current firebaseUser Username
-//        String curr_username = "username";
-//
-//        if (((MainItem)adapter.getDatasetListItem(currSelectedCommentItemTimestamp)).getMainData().getUsername().equals(curr_username))
-//            setCurrUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
-//        else
-//            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
-//    }
-//
-//    public static void setMainCommentItemUnSelected(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
-//    {
-//        setDefaultToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
-//    }
-//
-//    public static void setReplyCommentItemSelected(Context ctx, String selectedReplyCommentItemContainerTimestamp, String currSelectedCommentItemTimestamp, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
-//    {
-//        //Get current firebaseUser Username
-//        String curr_username = "username";
-//
-//        if(((ReplyItem)((RepliesContainerItem)adapter.getDatasetListItem(selectedReplyCommentItemContainerTimestamp)).getReplyItem(currSelectedCommentItemTimestamp)).getReplyData().getUsername().equals(curr_username))
-//            setCurrUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
-//        else
-//            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
-//    }
-//
-//    public static void setReplyCommentItemUnSelected(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
-//    {
-//        setDefaultToolbarConfig(ctx, toolbar, backBtn, commentsTitle, shareBtn);
-//    }
+    public static void setContext(Context ctx)
+    {
+        CommentsUtil.ctx = ctx;
+        isItemSelected = false;
+        System.out.println(isItemSelected+"isItemSelected in CommentsUtil setContext()");
+    }
+    public static void setToolbarComponents(Toolbar toolbar, ImageView leftBtn, TextView title, ImageView rightBtn)
+    {
+        System.out.println(isItemSelected+" isItemSelected in CommentsUtil "+getCurrentTime());
+        System.out.println(curr_selected_item_type+ " curr selected type in CommentsUtil "+getCurrentTime());
+        System.out.println(curr_selected_item_container_timestamp + " curr selected item container timestamp in CommentsUtil "+getCurrentTime());
+        System.out.println(curr_selected_Item_timestamp + " curr selected item timestamp in CommentsUtil "+getCurrentTime());
 
-    public static void showItemSelectedToolbar(Context ctx, int itemType, String itemTimestamp, String itemContainerTimestamp, Toolbar toolbar, ImageButton leftBtn, TextView title, ImageButton rightBtn)
+        mToolbar = toolbar;
+        mLeftBtn = leftBtn;
+        mTitle = title;
+        mRightBtn = rightBtn;
+    }
+
+    public static void updateToolbar(int type, String itemTimestamp, String itemContainerTimestamp)
+    {
+        System.out.println(type+ " type received in CommentsUtil "+getCurrentTime());
+        switch (type)
+        {
+            case CommentsActivity.MAIN_COMMENT:
+
+                System.out.println(isItemSelected+" isItemSelected in CommentsUtil "+getCurrentTime());
+                System.out.println(curr_selected_Item_timestamp + "currSelectedItemTimestamp in CommentsUtil"+getCurrentTime());
+                if(isItemSelected)
+                {
+                    if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
+                        if(curr_selected_Item_timestamp.equals(itemTimestamp))
+                            setItemUnselected(type);
+                        else
+                            sendItemSelectReqRes(type, itemTimestamp, false);
+                }
+                else
+                    setItemSelected(type, itemTimestamp, null);
+
+                break;
+
+            case CommentsActivity.REPLY_COMMENT:
+
+//                    System.out.println(itemTimestamp+" itemTimestamp received in CommentsActivity");
+//                    System.out.println(itemContainerTimestamp+" itemContainerTimestamp received in CommentsActivity");
+                if (isItemSelected)
+                {
+                    if (curr_selected_item_type == CommentsActivity.REPLY_COMMENT) {
+
+                        if (curr_selected_item_container_timestamp.equals(itemContainerTimestamp) && curr_selected_Item_timestamp.equals(itemTimestamp))
+                            setItemUnselected(type);
+
+                    }
+                    else
+                        sendItemSelectReqRes(type, itemContainerTimestamp, itemTimestamp, false);
+                }
+
+                else
+                    setItemSelected(type, itemTimestamp, itemContainerTimestamp);
+
+                break;
+
+
+        }
+    }
+
+    private static void setItemUnselected(int itemType)
     {
         switch (itemType)
         {
             case CommentsActivity.MAIN_COMMENT:
-                setMainItemSelectedToolbar(ctx, itemTimestamp, toolbar, leftBtn, title, rightBtn);
+                isItemSelected = false;
+                showDefaultToolbar();
+                sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
+                curr_selected_Item_timestamp = " ";
                 break;
+
             case CommentsActivity.REPLY_COMMENT:
-                setReplyItemSelectedToolbar(ctx, itemTimestamp, itemContainerTimestamp, toolbar, leftBtn, title, rightBtn);
+                isItemSelected = false;
+                showDefaultToolbar();
+                sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+                curr_selected_item_container_timestamp = " ";
+                curr_selected_Item_timestamp = " ";
                 break;
         }
     }
 
-    private static void setMainItemSelectedToolbar(Context ctx, String itemTimestamp, Toolbar toolbar, ImageButton leftBtn, TextView title, ImageButton rightBtn)
+    private static void setItemSelected(int itemType, String itemTimestamp, String itemContainerTimestamp)
     {
-        MainItem mainItem = (MainItem) adapter.getDatasetListItem(itemTimestamp);
+        switch (itemType)
+        {
+            case CommentsActivity.MAIN_COMMENT:
+                curr_selected_item_type = itemType;
+                isItemSelected = true;
+                curr_selected_Item_timestamp = itemTimestamp;
+                showItemSelectedToolbar(itemType);
+                sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
+                break;
+
+            case CommentsActivity.REPLY_COMMENT:
+                curr_selected_item_type = itemType;
+                isItemSelected = true;
+                curr_selected_item_container_timestamp = itemContainerTimestamp;
+                curr_selected_Item_timestamp = itemTimestamp;
+                showItemSelectedToolbar(itemType);
+                sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+                break;
+        }
+    }
+
+    public static void showItemSelectedToolbar(int itemType)
+    {
+        switch (itemType)
+        {
+            case CommentsActivity.MAIN_COMMENT:
+                setMainItemSelectedToolbar();
+                break;
+            case CommentsActivity.REPLY_COMMENT:
+                setReplyItemSelectedToolbar();
+                break;
+        }
+    }
+
+    private static void sendItemSelectReqRes(int type, String itemTimestamp, boolean res)
+    {
+//        System.out.println("Res from CommentsActivity "+res );
+//        System.out.println("Main Item Timestamp from CommentsActivity"+itemTimestamp);
+        Bundle b = new Bundle();
+        b.putInt("itemType", type);
+        b.putString("itemTimestamp", itemTimestamp);
+        b.putBoolean("res", res);
+
+        Intent i = new Intent();
+        i.setAction("itemSelectReqRes");
+        i.putExtras(b);
+
+        LocalBroadcastManager.getInstance(ctx).sendBroadcast(i);
+    }
+
+    private static void sendItemSelectReqRes(int type, String itemContainerTimestamp, String itemTimestamp, boolean res)
+    {
+//        System.out.println(res + " res from sendItemSelectReqRes() in CommentsActivity");
+//        System.out.println(itemContainerTimestamp + " item Container Timestamp from sendItemSelectReqRes() in CommentsActivity");
+//        System.out.println(itemTimestamp + " item Timestamp from sendItemSelectReqRes() in CommentsActivity");
+        Bundle b = new Bundle();
+        b.putInt("itemType", type);
+        b.putString("itemContainerTimestamp", itemContainerTimestamp);
+        b.putString("itemTimestamp", itemTimestamp);
+        b.putBoolean("res", res);
+
+        Intent i = new Intent();
+        i.setAction("itemSelectReqRes");
+        i.putExtras(b);
+
+        LocalBroadcastManager.getInstance(ctx).sendBroadcast(i);
+    }
+
+    private static void setMainItemSelectedToolbar()
+    {
+        MainItem mainItem = (MainItem) adapter.getDatasetListItem(curr_selected_Item_timestamp);
 
         String itemUsername = mainItem.getMainData().getUsername();
 
         String dummyUsername = "username";
 
         if(itemUsername.equals(dummyUsername))
-            setCurrUserItemSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+            setCurrUserItemSelectedToolbarConfig();
         else
-            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+            setOtherUserCommentSelectedToolbarConfig();
     }
 
-    private static void setReplyItemSelectedToolbar(Context ctx, String itemTimestamp, String itemContainerTimestamp, Toolbar toolbar, ImageButton leftBtn, TextView title, ImageButton rightBtn)
+    private static void setReplyItemSelectedToolbar()
     {
-        RepliesContainerItem replyContainerItem = (RepliesContainerItem) adapter.getDatasetListItem(itemContainerTimestamp);
+        RepliesContainerItem replyContainerItem = (RepliesContainerItem) adapter.getDatasetListItem(curr_selected_item_container_timestamp);
 
-        ReplyItem replyItem = replyContainerItem.getReplyItem(itemTimestamp);
+        ReplyItem replyItem = replyContainerItem.getReplyItem(curr_selected_Item_timestamp);
 
         String itemUsername = replyItem.getReplyData().getUsername();
 
         String dummyUsername = "username";
 
         if(itemUsername.equals(dummyUsername))
-            setCurrUserItemSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+            setCurrUserItemSelectedToolbarConfig();
         else
-            setOtherUserCommentSelectedToolbarConfig(ctx, toolbar, leftBtn, title, rightBtn);
+            setOtherUserCommentSelectedToolbarConfig();
     }
 
-    private static void setCurrUserItemSelectedToolbarConfig(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+    private static void setCurrUserItemSelectedToolbarConfig()
     {
-        Toast.makeText(ctx, "Curr User Comment Selected Toolbar Config", Toast.LENGTH_SHORT).show();
-        toolbar.setBackgroundResource(R.color.colorIGBlue);
-        backBtn.setImageResource(R.drawable.ic_close_white);
-        Toast.makeText(ctx, commentsTitle.getText(), Toast.LENGTH_SHORT).show();
-        commentsTitle.setText("1 Selected");
-        commentsTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
-        shareBtn.setImageResource(R.drawable.ic_delete_white);
+        mToolbar.setBackgroundResource(R.color.colorIGBlue);
+        mLeftBtn.setImageResource(R.drawable.ic_close_white);
+        mTitle.setText("1 Selected");
+        mTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
+        mRightBtn.setImageResource(R.drawable.ic_delete_white);
     }
 
-    private static void setOtherUserCommentSelectedToolbarConfig(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+    private static void setOtherUserCommentSelectedToolbarConfig()
     {
-        toolbar.setBackgroundResource(R.color.colorIGBlue);
-        backBtn.setImageResource(R.drawable.ic_close_white);
-        commentsTitle.setText("1 Selected");
-        commentsTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
-        shareBtn.setImageResource(R.drawable.ic_info_white);
+        mToolbar.setBackgroundResource(R.color.colorIGBlue);
+        mLeftBtn.setImageResource(R.drawable.ic_close_white);
+        mTitle.setText("1 Selected");
+        mTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
+        mRightBtn.setImageResource(R.drawable.ic_info_white);
     }
 
-    public static void showDefaultToolbar(Context ctx, Toolbar toolbar, ImageButton backBtn, TextView commentsTitle, ImageButton shareBtn)
+    public static void showDefaultToolbar()
     {
-        toolbar.setBackgroundResource(android.R.color.white);
-        backBtn.setImageResource(R.drawable.ic_back);
-        commentsTitle.setText("Comments");
-        commentsTitle.setTextColor(ctx.getResources().getColor(android.R.color.black, null));
-        shareBtn.setImageResource(R.drawable.ic_share);
+        mToolbar.setBackgroundResource(android.R.color.white);
+        mLeftBtn.setImageResource(R.drawable.ic_back);
+        mTitle.setText("Comments");
+        mTitle.setTextColor(ctx.getResources().getColor(android.R.color.black, null));
+        mRightBtn.setImageResource(R.drawable.ic_share);
     }
 
     public static void updateCommentsRecyclerDataset(TreeMap<String, ListItem> items)
@@ -226,31 +337,8 @@ public class CommentsUtil extends ViewModel {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ctx);
         recyclerView.setLayoutManager(layoutManager);
 
-        RepliesContainerRecyclerAdapterNEW adapter = new RepliesContainerRecyclerAdapterNEW(data);
+        RepliesContainerRecyclerAdapter adapter = new RepliesContainerRecyclerAdapter(data);
         recyclerView.setAdapter(adapter);
-    }
-
-    public static void setListItems(TreeMap<String, ListItem> listItems) {
-        CommentsUtil.listITEMS= listItems;
-    }
-
-    public static TreeMap<String, ListItem> getListItems() {
-        return listITEMS;
-    }
-
-    public static void setMainData(CommentsDataModel data)
-    {
-        CommentsUtil.data.setMainData(data);
-    }
-
-    public static ArrayList<CommentsDataModel> getRepliesData()
-    {
-        return data.getRepliesData();
-    }
-
-    public static void setRepliesData(CommentsDataModel repliesData)
-    {
-        data.setRepliesData(repliesData);
     }
 
     public static SpannableString getCommentText(String username, String comment, int color) {
@@ -384,6 +472,7 @@ public class CommentsUtil extends ViewModel {
         }
 
         long now = getCurrentTime()*1000L;
+
         if (time > now || time <= 0) {
 
             System.out.println(now+" time returning"+time);

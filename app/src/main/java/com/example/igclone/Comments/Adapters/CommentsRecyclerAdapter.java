@@ -25,7 +25,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
 
     public CommentsRecyclerAdapter()
     {
-        System.out.println("Set Comments Recycler Data");
+//        System.out.println("Set Comments Recycler Data");
         preDataset = new TreeMap<>();
         dataset = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
 
     public ListItem getDatasetListItem(String timestamp)
     {
-        System.out.println(timestamp + " timestamp requested for ListItem in CommentsRecyclerAdapter");
+//        System.out.println(timestamp + " timestamp requested for ListItem in CommentsRecyclerAdapter");
         return preDataset.get(timestamp);
     }
 
@@ -116,16 +116,6 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
         return dataset;
     }
 
-//    public void addItemAtPosition(int position, ListItem item)
-//    {
-//        if(item.getType()==CommentsActivity.MAIN_COMMENT)
-//            preDataset.put(String.valueOf(item.getMainCommentTimestamp()), item);
-//        else
-//            preDataset.put(item.getMainCommentTimestamp()+"R", item);
-////        dataset.add(position, item);
-//        notifyDataSetChanged();
-//    }
-
 
     @Override
     public int getItemViewType(int position) {
@@ -138,13 +128,13 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
         int type = getItemViewType(i);
         if(type == ListItem.TYPE_MAIN)
         {
-            System.out.println("Position "+i+" Setting type Main");
+//            System.out.println("Position "+i+" Setting type Main");
             View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_comment, viewGroup, false);
             return new MainItemVH(itemView);
         }
         if(type == ListItem.TYPE_REPLIES)
         {
-            System.out.println("Position "+i+" Setting type Reply");
+//            System.out.println("Position "+i+" Setting type Reply");
             View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_replies, viewGroup, false);
             return new RepliesContainerVH(itemView);
         }
@@ -155,45 +145,12 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
         int type = getItemViewType(i);
         if (type == ListItem.TYPE_MAIN) {
-//            ArrayList<Long> keys = new ArrayList<>(dataset.keySet());
-//            final Main mainItem = (Main) dataset.get(keys.get(i));
             final MainItem mainItem = (MainItem) preDataset.get(dataset.get(i));
             System.out.println(mainItem.getMainData().getComment()+"Main Item Position"+i);
             mainItemVH = (MainItemVH) viewHolder;
             mainItemVH.bind(mainItem.getMainData());
-//            mainItemVH.likeBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(mainItem.getMainData().isLiked())
-//                    {
-//                        CommentsUtil.likeBtnUnlikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
-//                        mainItem.getMainData().decrementLikeCount();
-//                        mainItem.getMainData().setLiked(false);
-//                    }
-//                    else {
-//                        CommentsUtil.likeBtnLikedInteractionAnimate(mainItemVH.likeBtn, mainItemVH.itemView.getContext());
-//                        mainItem.getMainData().incrementLikeCount();
-//                        mainItem.getMainData().setLiked(true);
-//                    }
-//
-//                    CommentsUtil.setMainData(mainItem.getMainData());
-//                    notifyItemChanged(dataset.indexOf(mainItem));
-////                    int pos=0;
-////                    for(Long key:dataset.keySet())
-////                    {
-////                        if (dataset.get(key)==mainItem) {
-////                            notifyItemChanged(pos);
-////                            break;
-////                        }
-////                        pos++;
-////                    }
-//
-//                }
-//            });
         }
         if (type == ListItem.TYPE_REPLIES){
-//            ArrayList<Long> keys = new ArrayList<>(dataset.keySet());
-//            ReplyItem replyItem = (ReplyItem) dataset.get(keys.get(i));
             RepliesContainerItem repliesContainerItem = (RepliesContainerItem) preDataset.get(dataset.get(i));
 //            System.out.println(replyItem.getRepliesArrayData().get(0).getComment()+" REply Item");
             repliesContainerVH = (RepliesContainerVH) viewHolder;
@@ -205,7 +162,6 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-//        return dataset.keySet().size();
         return dataset.size();
     }
 }

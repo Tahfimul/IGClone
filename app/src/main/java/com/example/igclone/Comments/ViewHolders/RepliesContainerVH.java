@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapterNEW;
+import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapter;
 import com.example.igclone.Comments.DataModel.ReplyItem;
 import com.example.igclone.R;
 import com.example.igclone.Comments.Util.CommentsUtil;
@@ -16,7 +16,7 @@ public class RepliesContainerVH extends RecyclerView.ViewHolder implements View.
     private TextView viewRepliesBtn;
     private boolean isViewing;
     private RecyclerView recyclerView;
-    private RepliesContainerRecyclerAdapterNEW adapter;
+    private RepliesContainerRecyclerAdapter adapter;
 
     public RepliesContainerVH(@NonNull View itemView) {
         super(itemView);
@@ -29,7 +29,7 @@ public class RepliesContainerVH extends RecyclerView.ViewHolder implements View.
     {
         recyclerView.setVisibility(View.GONE);
         CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), data);
-        adapter = (RepliesContainerRecyclerAdapterNEW) recyclerView.getAdapter();
+        adapter = (RepliesContainerRecyclerAdapter) recyclerView.getAdapter();
         viewRepliesBtn.setOnClickListener(this);
     }
 

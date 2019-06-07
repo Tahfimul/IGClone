@@ -47,10 +47,10 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     private static int replying_to_source;
     private static String POST_ID;
 
-    private static int curr_selected_item_type;
-    private static String curr_selected_Item_timestamp;
-    private static String curr_selected_item_container_timestamp;
-    private static boolean isItemSelected;
+//    private static int curr_selected_item_type;
+//    private static String curr_selected_Item_timestamp;
+//    private static String curr_selected_item_container_timestamp;
+//    private static boolean isItemSelected;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,9 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         replyIndicatorMsg = findViewById(R.id.replying_inidicator_message);
         replyIndicatorDismissBtn = findViewById(R.id.replying_indicator_dismiss_btn);
 
+        CommentsUtil.setContext(this);
+        CommentsUtil.setToolbarComponents(mToolbar, leftBtn, mTitle, rightBtn);
+
         setUpRecycler();
 
         registerReplyBroadcastReceiver();
@@ -99,7 +102,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setUpRecycler() {
-        CommentsUtil.initCommentsRecycler(commentsRecycler, getApplicationContext(), POST_ID);
+        CommentsUtil.initCommentsRecycler(commentsRecycler, POST_ID);
 
         CommentsUtil viewModel = ViewModelProviders.of(this).get(CommentsUtil.class);
 
@@ -162,159 +165,135 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            System.out.println("Received Item Select Req in CommentsActivity");
+
             int type = intent.getExtras().getInt("itemType");
             String itemTimestamp = intent.getExtras().getString("itemTimestamp");
+            String itemContainerTimestamp = intent.getExtras().getString("itemContainerTimestamp");
 
-            switch (type)
-            {
-                case CommentsActivity.MAIN_COMMENT:
+            CommentsUtil.updateToolbar(type, itemTimestamp, itemContainerTimestamp);
 
-                    if(isItemSelected)
-                    {
-                        if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
-                            if(curr_selected_Item_timestamp.equals(itemTimestamp))
-                                setItemUnselected(type);
-                        else
-                            sendItemSelectReqRes(type, itemTimestamp, false);
-                    }
-                    else
-                        setItemSelected(type, itemTimestamp, null);
-
-                    break;
-
-                case CommentsActivity.REPLY_COMMENT:
-                    String itemContainerTimestamp = intent.getExtras().getString("itemContainerTimestamp");
-
-                    System.out.println(itemTimestamp+" itemTimestamp received in CommentsActivity");
-                    System.out.println(itemContainerTimestamp+" itemContainerTimestamp received in CommentsActivity");
-                    if (isItemSelected)
-                    {
-                        if (curr_selected_item_type == CommentsActivity.REPLY_COMMENT) {
-
-                            if (curr_selected_item_container_timestamp.equals(itemContainerTimestamp) && curr_selected_Item_timestamp.equals(itemTimestamp))
-                                setItemUnselected(type);
-
-                        }
-                        else
-                            sendItemSelectReqRes(type, itemContainerTimestamp, itemTimestamp, false);
-                    }
-
-                    else
-                        setItemSelected(type, itemTimestamp, itemContainerTimestamp);
-
-                    break;
-
-
-            }
-//            Toast.makeText(CommentsActivity.this, "Main Comment Item Selected", Toast.LENGTH_SHORT).show();
-//            selected_reply_comment_item_container_timestamp = " ";
-//
-//            if(!isCommentItemSelected) {
-//                curr_selected_comment_Item_timestamp = intent.getExtras().getString("mainCommentItemTimestamp");
-//                isCommentItemSelected = true;
-//                CommentsUtil.setMainCommentItemSelected(CommentsActivity.this, curr_selected_comment_Item_timestamp, mToolbar, backBtn, mCommentsTitle, shareBtn);
-//
-//                Bundle bundle = new Bundle();
-//                bundle.putBoolean("mainCommentItemSelectionConfirmed", true);
-//                Intent i = new Intent();
-//                i.setAction("mainCommentItemSelectionConfirmation");
-//                i.putExtras(bundle);
-//                LocalBroadcastManager.getInstance(CommentsActivity.this).sendBroadcast(i);
-//
-//            }
-//            if(curr_selected_comment_Item_timestamp.equals(intent.getExtras().getString("mainCommentItemTimestamp")))
+//            switch (type)
 //            {
-//                isCommentItemSelected = false;
-//                CommentsUtil.setMainCommentItemUnSelected(CommentsActivity.this, mToolbar, backBtn, mCommentsTitle, shareBtn);
-//                curr_selected_comment_Item_timestamp = " ";
+//                case CommentsActivity.MAIN_COMMENT:
 //
-//                Bundle bundle = new Bundle();
-//                bundle.putBoolean("mainCommentItemSelectionConfirmed", true);
-//                Intent i = new Intent();
-//                i.setAction("mainCommentItemSelectionConfirmation");
-//                i.putExtras(bundle);
-//                LocalBroadcastManager.getInstance(CommentsActivity.this).sendBroadcast(i);
+//                    if(isItemSelected)
+//                    {
+//                        if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
+//                            if(curr_selected_Item_timestamp.equals(itemTimestamp))
+//                                setItemUnselected(type);
+//                        else
+//                            sendItemSelectReqRes(type, itemTimestamp, false);
+//                    }
+//                    else
+//                        setItemSelected(type, itemTimestamp, null);
+//
+//                    break;
+//
+//                case CommentsActivity.REPLY_COMMENT:
+//                    String itemContainerTimestamp = intent.getExtras().getString("itemContainerTimestamp");
+//
+////                    System.out.println(itemTimestamp+" itemTimestamp received in CommentsActivity");
+////                    System.out.println(itemContainerTimestamp+" itemContainerTimestamp received in CommentsActivity");
+//                    if (isItemSelected)
+//                    {
+//                        if (curr_selected_item_type == CommentsActivity.REPLY_COMMENT) {
+//
+//                            if (curr_selected_item_container_timestamp.equals(itemContainerTimestamp) && curr_selected_Item_timestamp.equals(itemTimestamp))
+//                                setItemUnselected(type);
+//
+//                        }
+//                        else
+//                            sendItemSelectReqRes(type, itemContainerTimestamp, itemTimestamp, false);
+//                    }
+//
+//                    else
+//                        setItemSelected(type, itemTimestamp, itemContainerTimestamp);
+//
+//                    break;
+//
+//
 //            }
         }
     };
 
-    private void setItemUnselected(int itemType)
-    {
-        switch (itemType)
-        {
-            case CommentsActivity.MAIN_COMMENT:
-                isItemSelected = false;
-                CommentsUtil.showDefaultToolbar(this,mToolbar, leftBtn, mTitle, rightBtn);
-                sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
-                curr_selected_Item_timestamp = " ";
-                break;
-
-            case CommentsActivity.REPLY_COMMENT:
-                isItemSelected = false;
-                CommentsUtil.showDefaultToolbar(this, mToolbar, leftBtn, mTitle, rightBtn);
-                sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
-                curr_selected_item_container_timestamp = " ";
-                curr_selected_Item_timestamp = " ";
-                break;
-        }
-    }
-
-    private void setItemSelected(int itemType, String itemTimestamp, String itemContainerTimestamp)
-    {
-        switch (itemType)
-        {
-            case CommentsActivity.MAIN_COMMENT:
-                curr_selected_item_type = itemType;
-                isItemSelected = true;
-                curr_selected_Item_timestamp = itemTimestamp;
-                CommentsUtil.showItemSelectedToolbar(this, itemType, curr_selected_Item_timestamp, null, mToolbar, leftBtn, mTitle, rightBtn);
-                sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
-                break;
-
-            case CommentsActivity.REPLY_COMMENT:
-                curr_selected_item_type = itemType;
-                isItemSelected = true;
-                curr_selected_item_container_timestamp = itemContainerTimestamp;
-                curr_selected_Item_timestamp = itemTimestamp;
-                CommentsUtil.showItemSelectedToolbar(this, itemType, curr_selected_Item_timestamp, curr_selected_item_container_timestamp, mToolbar, leftBtn, mTitle, rightBtn);
-                sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
-                break;
-        }
-    }
-
-    private void sendItemSelectReqRes(int type, String itemTimestamp, boolean res)
-    {
-        System.out.println("Res from CommentsActivity "+res );
-        System.out.println("Main Item Timestamp from CommentsActivity"+itemTimestamp);
-        Bundle b = new Bundle();
-        b.putInt("itemType", type);
-        b.putString("itemTimestamp", itemTimestamp);
-        b.putBoolean("res", res);
-
-        Intent i = new Intent();
-        i.setAction("itemSelectReqRes");
-        i.putExtras(b);
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
-    }
-
-    private void sendItemSelectReqRes(int type, String itemContainerTimestamp, String itemTimestamp, boolean res)
-    {
-        System.out.println(res + " res from sendItemSelectReqRes() in CommentsActivity");
-        System.out.println(itemContainerTimestamp + " item Container Timestamp from sendItemSelectReqRes() in CommentsActivity");
-        System.out.println(itemTimestamp + " item Timestamp from sendItemSelectReqRes() in CommentsActivity");
-        Bundle b = new Bundle();
-        b.putInt("itemType", type);
-        b.putString("itemContainerTimestamp", itemContainerTimestamp);
-        b.putString("itemTimestamp", itemTimestamp);
-        b.putBoolean("res", res);
-
-        Intent i = new Intent();
-        i.setAction("itemSelectReqRes");
-        i.putExtras(b);
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
-    }
+//    private void setItemUnselected(int itemType)
+//    {
+//        switch (itemType)
+//        {
+//            case CommentsActivity.MAIN_COMMENT:
+//                isItemSelected = false;
+//                CommentsUtil.showDefaultToolbar(this,mToolbar, leftBtn, mTitle, rightBtn);
+//                sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
+//                curr_selected_Item_timestamp = " ";
+//                break;
+//
+//            case CommentsActivity.REPLY_COMMENT:
+//                isItemSelected = false;
+//                CommentsUtil.showDefaultToolbar(this, mToolbar, leftBtn, mTitle, rightBtn);
+//                sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+//                curr_selected_item_container_timestamp = " ";
+//                curr_selected_Item_timestamp = " ";
+//                break;
+//        }
+//    }
+//
+//    private void setItemSelected(int itemType, String itemTimestamp, String itemContainerTimestamp)
+//    {
+//        switch (itemType)
+//        {
+//            case CommentsActivity.MAIN_COMMENT:
+//                curr_selected_item_type = itemType;
+//                isItemSelected = true;
+//                curr_selected_Item_timestamp = itemTimestamp;
+//                CommentsUtil.showItemSelectedToolbar(this, itemType, curr_selected_Item_timestamp, null, mToolbar, leftBtn, mTitle, rightBtn);
+//                sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
+//                break;
+//
+//            case CommentsActivity.REPLY_COMMENT:
+//                curr_selected_item_type = itemType;
+//                isItemSelected = true;
+//                curr_selected_item_container_timestamp = itemContainerTimestamp;
+//                curr_selected_Item_timestamp = itemTimestamp;
+//                CommentsUtil.showItemSelectedToolbar(this, itemType, curr_selected_Item_timestamp, curr_selected_item_container_timestamp, mToolbar, leftBtn, mTitle, rightBtn);
+//                sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+//                break;
+//        }
+//    }
+//
+//    private void sendItemSelectReqRes(int type, String itemTimestamp, boolean res)
+//    {
+////        System.out.println("Res from CommentsActivity "+res );
+////        System.out.println("Main Item Timestamp from CommentsActivity"+itemTimestamp);
+//        Bundle b = new Bundle();
+//        b.putInt("itemType", type);
+//        b.putString("itemTimestamp", itemTimestamp);
+//        b.putBoolean("res", res);
+//
+//        Intent i = new Intent();
+//        i.setAction("itemSelectReqRes");
+//        i.putExtras(b);
+//
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+//    }
+//
+//    private void sendItemSelectReqRes(int type, String itemContainerTimestamp, String itemTimestamp, boolean res)
+//    {
+////        System.out.println(res + " res from sendItemSelectReqRes() in CommentsActivity");
+////        System.out.println(itemContainerTimestamp + " item Container Timestamp from sendItemSelectReqRes() in CommentsActivity");
+////        System.out.println(itemTimestamp + " item Timestamp from sendItemSelectReqRes() in CommentsActivity");
+//        Bundle b = new Bundle();
+//        b.putInt("itemType", type);
+//        b.putString("itemContainerTimestamp", itemContainerTimestamp);
+//        b.putString("itemTimestamp", itemTimestamp);
+//        b.putBoolean("res", res);
+//
+//        Intent i = new Intent();
+//        i.setAction("itemSelectReqRes");
+//        i.putExtras(b);
+//
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+//    }
 
     @Override
     public void onClick(View v) {
@@ -333,11 +312,11 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
                     switch (curr_comment_state)
                     {
                         case CommentsActivity.MAIN_COMMENT:
-                            System.out.println("Posting Main COmment");
+//                            System.out.println("Posting Main COmment");
                             CommentsUtil.postMainComment(comment);
                             break;
                         case CommentsActivity.REPLY_COMMENT:
-                            System.out.println("Posting Reply Comment");
+//                            System.out.println("Posting Reply Comment");
                             CommentsUtil.postReplyComment(reply_container_timestamp, comment);
                             break;
                     }
@@ -400,6 +379,19 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterAllReceivers();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterAllReceivers();
+
+    }
+
+    private void unregisterAllReceivers()
+    {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(replyBtnReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(itemSelectReqReceiver);
     }
 }

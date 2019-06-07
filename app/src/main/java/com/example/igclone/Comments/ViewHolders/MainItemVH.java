@@ -59,8 +59,8 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
         else
             likeBtn.setImageResource(R.drawable.ic_interactions);
 
-        System.out.println("MainItemVH timestamp "+data.getTimestamp());
-        System.out.println("MainItemVH timeAgo "+CommentsUtil.getTimeAgo(data.getTimestamp(), itemView.getContext()));
+//        System.out.println("MainItemVH timestamp "+data.getTimestamp());
+//        System.out.println("MainItemVH timeAgo "+CommentsUtil.getTimeAgo(data.getTimestamp(), itemView.getContext()));
         timestamp.setText(CommentsUtil.getTimeAgo(data.getTimestamp(), itemView.getContext()));
         timestamp.setTextColor(color);
 
@@ -77,11 +77,12 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
         switch (v.getId())
         {
             case R.id.relativeLayout:
-                Toast.makeText(itemView.getContext(), "Relative Layout Selected", Toast.LENGTH_SHORT).show();
+                System.out.println("MainItemVH selected");
+//                Toast.makeText(itemView.getContext(), "Relative Layout Selected", Toast.LENGTH_SHORT).show();
                 sendItemSelectReqBroadcast();
                 break;
             case R.id.like_btn:
-                Toast.makeText(itemView.getContext(), "Liked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(itemView.getContext(), "Liked", Toast.LENGTH_SHORT).show();
                 if (data.isLiked()) {
                     CommentsUtil.likeBtnUnlikedInteractionAnimate(likeBtn, itemView.getContext());
                     CommentsUtil.mainCommentLikeInteraction(data.getTimestamp(), !data.isLiked(), data.getLikeCount()-1);
@@ -94,7 +95,7 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
                 break;
             case R.id.reply_btn:
                 sendReplyBroadcast();
-                Toast.makeText(itemView.getContext(), "Reply", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(itemView.getContext(), "Reply", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -142,7 +143,6 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
 
             if(itemType == CommentsActivity.MAIN_COMMENT) {
 
-                System.out.println("");
                 boolean yes = intent.getExtras().getBoolean("res");
                 long timestamp = Long.valueOf(intent.getExtras().getString("itemTimestamp"));
                 if (yes && timestamp == data.getTimestamp()) {
