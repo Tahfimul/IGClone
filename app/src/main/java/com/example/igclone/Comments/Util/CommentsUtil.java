@@ -324,11 +324,11 @@ public class CommentsUtil extends ViewModel {
 
                 if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
                 {
-                    sendItemSelectReqRes(curr_selected_item_type, curr_selected_Item_timestamp, true);
+                    adapter.setMainItemUnselected();
                 }
                 else if(curr_selected_item_type == CommentsActivity.REPLY_COMMENT)
                 {
-                    sendItemSelectReqRes(curr_selected_item_type, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+                    adapter.setReplyItemUnselected();
                 }
 
                 resetToolbarSelectedFields();
@@ -343,7 +343,7 @@ public class CommentsUtil extends ViewModel {
                     case CommentsUtil.CURR_USER_ITEM_SELECTED:
                         if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
                         {
-                            sendUnregisterItemSelectReqRes();
+//                            sendUnregisterItemSelectReqRes();
                             adapter.setMainItemUnselected();
                             postDB.removeMainComment(curr_selected_Item_timestamp);
                         }
