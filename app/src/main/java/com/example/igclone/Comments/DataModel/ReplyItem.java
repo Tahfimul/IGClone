@@ -9,6 +9,8 @@ public class ReplyItem extends ListItem implements Reply {
 
     private CommentsDataModel data;
 
+    private boolean isSelected;
+
     public ReplyItem(String replyContainerTimestamp, long replyCommentTimestamp, CommentsDataModel data)
     {
         this.replyContainerTimestamp = replyContainerTimestamp;
@@ -47,5 +49,15 @@ public class ReplyItem extends ListItem implements Reply {
     @Override
     public void setReplyData(CommentsDataModel replyData) {
         data = replyData;
+    }
+
+    @Override
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isSelected;
     }
 }

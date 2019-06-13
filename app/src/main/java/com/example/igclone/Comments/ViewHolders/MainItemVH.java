@@ -7,15 +7,18 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.*;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.example.igclone.Comments.CommentsActivity;
 import com.example.igclone.Comments.DataModel.CommentsDataModel;
-import com.example.igclone.R;
+import com.example.igclone.Comments.DataModel.MainItem;
 import com.example.igclone.Comments.Util.CommentsUtil;
+import com.example.igclone.R;
 
-public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class MainItemVH extends CommentItemVH implements View.OnClickListener {
 
     private RelativeLayout mRelativeLayout;
     private boolean isSelected;
@@ -26,6 +29,7 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
     public TextView likeCount;
     private TextView replyBtn;
     private CommentsDataModel data;
+
 
     public MainItemVH(@NonNull View itemView) {
         super(itemView);
@@ -38,42 +42,49 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
         likeCount = itemView.findViewById(R.id.likes_count);
         replyBtn = itemView.findViewById(R.id.reply_btn);
 
-        registerItemSelectReqRes();
+//        registerItemSelectReqRes();
     }
 
-    public void bind(CommentsDataModel data)
-    {
-        this.data = data;
+    @Override
+    public void bindMainItem(MainItem mainItem) {
+        super.bindMainItem(mainItem);
+        System.out.println("Received MainItem in MainItemVH "+mainItem.getMainCommentTimestamp());
+        this.data = mainItem.getMainData();
 
         mRelativeLayout.setOnClickListener(this);
+
+        if (mainItem.isSelected())
+            setItemSelected();
+        else
+            setItemUnselected();
 
         userIcn.setImageResource(R.drawable.circle_border);
 
         int color = itemView.getContext().getResources().getColor(android.R.color.black, null);
-        txtContent.setText(CommentsUtil.getCommentText(data.getUsername(), data.getComment(), color));
+        txtContent.setText(CommentsUtil.getCommentText(this.data.getUsername(), this.data.getComment(), color));
 
         likeBtn.setOnClickListener(this);
 
-        if(data.isLiked())
+        if(this.data.isLiked())
             likeBtn.setImageResource(R.drawable.ic_liked);
         else
             likeBtn.setImageResource(R.drawable.ic_interactions);
 
 //        System.out.println("MainItemVH timestamp "+data.getTimestamp());
 //        System.out.println("MainItemVH timeAgo "+CommentsUtil.getTimeAgo(data.getTimestamp(), itemView.getContext()));
-        timestamp.setText(CommentsUtil.getTimeAgo(data.getTimestamp(), itemView.getContext()));
+        timestamp.setText(CommentsUtil.getTimeAgo(this.data.getTimestamp(), itemView.getContext()));
         timestamp.setTextColor(color);
 
-        likeCount.setText(data.getLikeCount() + " likes");
+        likeCount.setText(this.data.getLikeCount() + " likes");
         likeCount.setTextColor(color);
 
         replyBtn.setOnClickListener(this);
         replyBtn.setTextColor(color);
+
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId())
         {
             case R.id.relativeLayout:
@@ -98,7 +109,6 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
 //                Toast.makeText(itemView.getContext(), "Reply", Toast.LENGTH_SHORT).show();
                 break;
         }
-
     }
 
     //Send  Main Comment Selected Broadcast Message to CommentsActivity
@@ -124,49 +134,61 @@ public class MainItemVH extends RecyclerView.ViewHolder implements View.OnClickL
         LocalBroadcastManager.getInstance(itemView.getContext()).sendBroadcast(i);
     }
 
-    private void registerItemSelectReqRes()
-    {
-        // Register to receive confirmation to set Comment Item Selected or Unselected.
-        // We are registering an observer (mainCommentItemSelectionConfirmation) to receive Intents
-        // with actions named "ItemSelectReqRes". from CommentsActivity
-        LocalBroadcastManager.getInstance(itemView.getContext()).registerReceiver(itemSelectReqResReceiver,
-                new IntentFilter("itemSelectReqRes"));
-    }
-
-    // Our handler for received Intent. This will be called whenever an Intent
-    // with an action named "ItemSelectReqRes" is broadcast from CommentsActivity
-    private BroadcastReceiver itemSelectReqResReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            int itemType = intent.getExtras().getInt("itemType");
-
-            if(itemType == CommentsActivity.MAIN_COMMENT) {
-
-                boolean yes = intent.getExtras().getBoolean("res");
-                long timestamp = Long.valueOf(intent.getExtras().getString("itemTimestamp"));
-                if (yes && timestamp == data.getTimestamp()) {
-                    if (isSelected)
-                        setItemUnselected();
-
-                    else
-                        setItemSelected();
-
-                }
-            }
-        }
-    };
+//    private void registerItemSelectReqRes()
+//    {
+//
+//        // Register to receive confirmation to set Comment Item Selected or Unselected.
+//        // We are registering an observer (itemSelectReqRes) to receive Intents
+//        // with actions named "ItemSelectReqRes". from CommentsUtil
+//        LocalBroadcastManager.getInstance(itemView.getContext()).registerReceiver(itemSelectReqResReceiver,
+//                new IntentFilter("itemSelectReqRes"));
+//    }
+//
+//    // Our handler for received Intent. This will be called whenever an Intent
+//    // with an action named "ItemSelectReqRes" is broadcast from CommentsActivity
+//    private BroadcastReceiver itemSelectReqResReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//
+////            System.out.println("Item Select Req Res Receiver Triggered "+data.getTimestamp());
+//            int itemType = intent.getExtras().getInt("itemType");
+//
+//            if(itemType == CommentsActivity.MAIN_COMMENT) {
+//
+//                boolean yes = intent.getExtras().getBoolean("res");
+//                boolean del = intent.getExtras().getBoolean("del");
+//                long timestamp = Long.valueOf(intent.getExtras().getString("itemTimestamp"));
+//                if (yes && timestamp == data.getTimestamp()) {
+//                    if (isSelected) {
+//                        System.out.println("UnSelecting Item from MainItemVH "+data.getTimestamp());
+//                        setItemUnselected();
+//                    }
+//
+//                    else {
+//                        System.out.println("Selecting Item from MainItemVH "+data.getTimestamp());
+//                        setItemSelected();
+//                    }
+//
+//                }
+//
+//                else if (!yes && del && timestamp == data.getTimestamp())
+//                    setItemUnselected();
+//            }
+//        }
+//    };
 
     private void setItemUnselected()
     {
         mRelativeLayout.setBackgroundResource(android.R.color.white);
         isSelected = false;
+//        data.setItemSelected(isSelected);
     }
 
     private void setItemSelected()
     {
+        System.out.println("Setting Item Selected "+data.getTimestamp());
         mRelativeLayout.setBackgroundResource(R.color.colorLightIGBlue);
         isSelected = true;
+//        data.setItemSelected(isSelected);
     }
-
 }

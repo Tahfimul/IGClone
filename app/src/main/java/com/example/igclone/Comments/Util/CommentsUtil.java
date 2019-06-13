@@ -3,11 +3,13 @@ package com.example.igclone.Comments.Util;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +29,12 @@ import com.example.igclone.Comments.CommentsActivity;
 import com.example.igclone.Comments.DB.CommentsPostDB;
 import com.example.igclone.Comments.DataModel.*;
 import com.example.igclone.Comments.LiveData.CommentsLiveDATA;
+import com.example.igclone.Fragments.OtherUserItemSelectDiag;
 import com.example.igclone.R;
 import com.example.igclone.Util.BoldTextClickableSpan;
 import com.example.igclone.Util.NormalTextClickableSpan;
+import com.example.igclone.Util.SendToUserUtil;
+import com.google.android.gms.dynamic.SupportFragmentWrapper;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -45,7 +50,10 @@ public class CommentsUtil extends ViewModel {
     private static String curr_selected_Item_timestamp;
     private static String curr_selected_item_container_timestamp;
     private static boolean isItemSelected;
-    private static Context ctx;
+    private static final int CURR_USER_ITEM_SELECTED = 0;
+    private static final int OTHER_USER_ITEM_SELECTED = 1;
+    private static Activity ctx;
+    private static FragmentManager fm;
     private static Toolbar mToolbar;
     private static ImageView mLeftBtn;
     private static TextView mTitle;
@@ -74,6 +82,7 @@ public class CommentsUtil extends ViewModel {
 
     public static void postReplyComment(String replyContainerTimestamp, String comment)
     {
+        System.out.println(replyContainerTimestamp+" ");
         postDB.postReplyComment(replyContainerTimestamp, comment);
     }
 
@@ -87,18 +96,18 @@ public class CommentsUtil extends ViewModel {
         postDB.mainCommentLikeInteraction(mainCommentTimestamp, liked, likeCount);
     }
 
-    public static void setContext(Context ctx)
+    public static void setActivityComponents(Activity ctx, FragmentManager fm)
     {
         CommentsUtil.ctx = ctx;
-        isItemSelected = false;
-        System.out.println(isItemSelected+"isItemSelected in CommentsUtil setContext()");
+        CommentsUtil.fm = fm;
+
     }
     public static void setToolbarComponents(Toolbar toolbar, ImageView leftBtn, TextView title, ImageView rightBtn)
     {
-        System.out.println(isItemSelected+" isItemSelected in CommentsUtil "+getCurrentTime());
-        System.out.println(curr_selected_item_type+ " curr selected type in CommentsUtil "+getCurrentTime());
-        System.out.println(curr_selected_item_container_timestamp + " curr selected item container timestamp in CommentsUtil "+getCurrentTime());
-        System.out.println(curr_selected_Item_timestamp + " curr selected item timestamp in CommentsUtil "+getCurrentTime());
+//        System.out.println(isItemSelected+" isItemSelected in CommentsUtil "+getCurrentTime());
+//        System.out.println(curr_selected_item_type+ " curr selected type in CommentsUtil "+getCurrentTime());
+//        System.out.println(curr_selected_item_container_timestamp + " curr selected item container timestamp in CommentsUtil "+getCurrentTime());
+//        System.out.println(curr_selected_Item_timestamp + " curr selected item timestamp in CommentsUtil "+getCurrentTime());
 
         mToolbar = toolbar;
         mLeftBtn = leftBtn;
@@ -160,14 +169,19 @@ public class CommentsUtil extends ViewModel {
             case CommentsActivity.MAIN_COMMENT:
                 isItemSelected = false;
                 showDefaultToolbar();
+//                postDB.mainCommentSelected(curr_selected_Item_timestamp, false);
                 sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
+                adapter.setMainItemUnselected();
+//                ((MainItem) adapter.getDatasetListItem(curr_selected_Item_timestamp)).setSelected(false);
                 curr_selected_Item_timestamp = " ";
                 break;
 
             case CommentsActivity.REPLY_COMMENT:
                 isItemSelected = false;
                 showDefaultToolbar();
+//                postDB.replyCommentSelected(curr_selected_item_container_timestamp, curr_selected_Item_timestamp, false);
                 sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+                adapter.setReplyItemUnselected();
                 curr_selected_item_container_timestamp = " ";
                 curr_selected_Item_timestamp = " ";
                 break;
@@ -183,7 +197,10 @@ public class CommentsUtil extends ViewModel {
                 isItemSelected = true;
                 curr_selected_Item_timestamp = itemTimestamp;
                 showItemSelectedToolbar(itemType);
+//                postDB.mainCommentSelected(curr_selected_Item_timestamp, true);
                 sendItemSelectReqRes(itemType, curr_selected_Item_timestamp, true);
+//                ((MainItem) adapter.getDatasetListItem(curr_selected_Item_timestamp)).setSelected(true);
+                adapter.setMainItemSelected(curr_selected_Item_timestamp);
                 break;
 
             case CommentsActivity.REPLY_COMMENT:
@@ -192,7 +209,9 @@ public class CommentsUtil extends ViewModel {
                 curr_selected_item_container_timestamp = itemContainerTimestamp;
                 curr_selected_Item_timestamp = itemTimestamp;
                 showItemSelectedToolbar(itemType);
+//                postDB.replyCommentSelected(curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
                 sendItemSelectReqRes(itemType, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+                adapter.setReplyItemSelected(curr_selected_item_container_timestamp, curr_selected_Item_timestamp);
                 break;
         }
     }
@@ -212,8 +231,8 @@ public class CommentsUtil extends ViewModel {
 
     private static void sendItemSelectReqRes(int type, String itemTimestamp, boolean res)
     {
-//        System.out.println("Res from CommentsActivity "+res );
-//        System.out.println("Main Item Timestamp from CommentsActivity"+itemTimestamp);
+        System.out.println("Res from CommentsUtil "+res );
+        System.out.println("Main Item Timestamp from CommentsUtil"+itemTimestamp);
         Bundle b = new Bundle();
         b.putInt("itemType", type);
         b.putString("itemTimestamp", itemTimestamp);
@@ -281,6 +300,8 @@ public class CommentsUtil extends ViewModel {
         mTitle.setText("1 Selected");
         mTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
         mRightBtn.setImageResource(R.drawable.ic_delete_white);
+
+        setItemSelectedBtnListeners(CURR_USER_ITEM_SELECTED);
     }
 
     private static void setOtherUserCommentSelectedToolbarConfig()
@@ -290,15 +311,125 @@ public class CommentsUtil extends ViewModel {
         mTitle.setText("1 Selected");
         mTitle.setTextColor(ctx.getResources().getColor(android.R.color.white, null));
         mRightBtn.setImageResource(R.drawable.ic_info_white);
+
+        setItemSelectedBtnListeners(OTHER_USER_ITEM_SELECTED);
+    }
+
+    private static void setItemSelectedBtnListeners(final int type) {
+
+        mLeftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDefaultToolbar();
+
+                if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
+                {
+                    sendItemSelectReqRes(curr_selected_item_type, curr_selected_Item_timestamp, true);
+                }
+                else if(curr_selected_item_type == CommentsActivity.REPLY_COMMENT)
+                {
+                    sendItemSelectReqRes(curr_selected_item_type, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+                }
+
+                resetToolbarSelectedFields();
+            }
+        });
+
+        mRightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (type)
+                {
+                    case CommentsUtil.CURR_USER_ITEM_SELECTED:
+                        if(curr_selected_item_type == CommentsActivity.MAIN_COMMENT)
+                        {
+                            sendUnregisterItemSelectReqRes();
+                            adapter.setMainItemUnselected();
+                            postDB.removeMainComment(curr_selected_Item_timestamp);
+                        }
+                        else if(curr_selected_item_type == CommentsActivity.REPLY_COMMENT)
+                        {
+                            adapter.setReplyItemUnselected();
+                            postDB.removeReplyComment(curr_selected_item_container_timestamp, curr_selected_Item_timestamp);
+                        }
+                        showDefaultToolbar();
+                        resetToolbarSelectedFields();
+                        break;
+
+                    case CommentsUtil.OTHER_USER_ITEM_SELECTED:
+                        OtherUserItemSelectDiag diag = new OtherUserItemSelectDiag();
+                        diag.show(fm, "otherUserDiag");
+                        break;
+                }
+            }
+        });
+
+    }
+
+    private static void sendUnregisterItemSelectReqRes()
+    {
+        Bundle b = new Bundle();
+        b.putBoolean("res", false);
+        b.putBoolean("del", true);
+        b.putInt("itemType", curr_selected_item_type);
+        b.putString("itemContainerTimestamp", curr_selected_item_container_timestamp);
+        b.putString("itemTimestamp", curr_selected_Item_timestamp);
+
+        Intent i = new Intent();
+        i.setAction("itemSelectReqRes");
+        i.putExtras(b);
+
+        LocalBroadcastManager.getInstance(ctx).sendBroadcast(i);
     }
 
     public static void showDefaultToolbar()
     {
+
+//        //Unhighlight selected main comment item or reply comment item
+//        if (isItemSelected) {
+//
+//            switch (curr_selected_item_type) {
+//                case CommentsActivity.MAIN_COMMENT:
+//                    sendItemSelectReqRes(curr_selected_item_type, curr_selected_Item_timestamp, true);
+//                    break;
+//                case CommentsActivity.REPLY_COMMENT:
+//                    sendItemSelectReqRes(curr_selected_item_type, curr_selected_item_container_timestamp, curr_selected_Item_timestamp, true);
+//                    break;
+//            }
+//        }
+
         mToolbar.setBackgroundResource(android.R.color.white);
         mLeftBtn.setImageResource(R.drawable.ic_back);
         mTitle.setText("Comments");
         mTitle.setTextColor(ctx.getResources().getColor(android.R.color.black, null));
         mRightBtn.setImageResource(R.drawable.ic_share);
+
+        setDefaultBtnListeners();
+    }
+
+    private static void setDefaultBtnListeners()
+    {
+        mLeftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctx.finish();
+            }
+        });
+
+        mRightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendToUserUtil.showSendToUserModal(fm);
+            }
+        });
+    }
+
+    private static void resetToolbarSelectedFields()
+    {
+        isItemSelected = false;
+        curr_selected_item_type = -1;
+        curr_selected_Item_timestamp = " ";
+        curr_selected_item_container_timestamp = " ";
     }
 
     public static void updateCommentsRecyclerDataset(TreeMap<String, ListItem> items)

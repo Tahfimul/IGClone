@@ -19,4 +19,6 @@ public interface RepliesContainer {
 
     void setRepliesContainerVH(RepliesContainerVH vh);
 
+    void removeReplyItem(ReplyItem item);
+
 }

@@ -50,8 +50,9 @@ public class RepliesContainerItem extends ListItem implements RepliesContainer {
     }
 
     @Override
-    public void setRepliesContainerVH(RepliesContainerVH repliesContainerVH) {
-        this.repliesContainerVH = repliesContainerVH;
+    public void setRepliesContainerVH(RepliesContainerVH vh) {
+        System.out.println("Setting Replies Container VH in RepliesContainerItem");
+        repliesContainerVH = vh;
     }
 
     public ReplyItem getReplyItem(String replyItemTimestamp)
@@ -61,5 +62,10 @@ public class RepliesContainerItem extends ListItem implements RepliesContainer {
                 return item;
 
         return null;
+    }
+
+    @Override
+    public void removeReplyItem(ReplyItem item) {
+        replyItems.remove(item);
     }
 }

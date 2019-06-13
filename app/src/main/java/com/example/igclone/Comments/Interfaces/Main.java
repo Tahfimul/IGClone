@@ -11,4 +11,8 @@ public interface Main {
     CommentsDataModel getMainData();
 
     void setMainData(CommentsDataModel mainData);
+
+    void setSelected(boolean selected);
+
+    boolean isSelected();
 }

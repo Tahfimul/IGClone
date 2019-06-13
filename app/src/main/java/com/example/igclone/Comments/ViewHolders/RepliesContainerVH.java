@@ -5,13 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import com.example.igclone.Comments.Adapters.RepliesContainerRecyclerAdapter;
+import com.example.igclone.Comments.DataModel.RepliesContainerItem;
 import com.example.igclone.Comments.DataModel.ReplyItem;
-import com.example.igclone.R;
 import com.example.igclone.Comments.Util.CommentsUtil;
+import com.example.igclone.R;
 
-import java.util.ArrayList;
-
-public class RepliesContainerVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class RepliesContainerVH extends CommentItemVH implements View.OnClickListener{
 
     private TextView viewRepliesBtn;
     private boolean isViewing;
@@ -25,14 +24,18 @@ public class RepliesContainerVH extends RecyclerView.ViewHolder implements View.
         recyclerView = itemView.findViewById(R.id.recyclerView);
     }
 
-    public void bind(ArrayList<ReplyItem> data)
-    {
+    @Override
+    public void bindReplyContainerItem(RepliesContainerItem replyContainerItem) {
+        super.bindReplyContainerItem(replyContainerItem);
+
+        replyContainerItem.setRepliesContainerVH(this);
+
+        System.out.println("Received replyItem in replyContainerItem "+replyContainerItem.getRepliesContainerTimestamp());
         recyclerView.setVisibility(View.GONE);
-        CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), data);
+        CommentsUtil.initRepliesItemRecycler(recyclerView, itemView.getContext(), replyContainerItem.getReplyItems());
         adapter = (RepliesContainerRecyclerAdapter) recyclerView.getAdapter();
         viewRepliesBtn.setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -60,4 +63,6 @@ public class RepliesContainerVH extends RecyclerView.ViewHolder implements View.
     {
         return recyclerView;
     }
+
+
 }

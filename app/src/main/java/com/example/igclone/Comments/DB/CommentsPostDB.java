@@ -29,23 +29,12 @@ public class CommentsPostDB {
     {
         DatabaseReference mMainCommentsRef = mCommentsRef.child("MainComments").child(String.valueOf(CommentsUtil.getCurrentTime()));
         mMainCommentsRef.setValue(new CommentsDataModel("abc", "username", comment, false,  CommentsUtil.getCurrentTime(), 0));
-//        mMainCommentsRef.child("comment").setValue(comment);
-//        mMainCommentsRef.child("likeCount").setValue(0);
-//        mMainCommentsRef.child("liked").setValue(false);
-//        mMainCommentsRef.child("timestamp").setValue(CommentsUtil.getCurrentTime());
-//        mMainCommentsRef.child("userIconSrc").setValue("abc");
-//        mMainCommentsRef.child("username").setValue("username");
     }
 
     public void postReplyComment(String replyContainerTimestamp, String comment)
     {
         DatabaseReference mReplyCommentsRef = mCommentsRef.child("ReplyComments").child(replyContainerTimestamp).child(String.valueOf(CommentsUtil.getCurrentTime()));
-        mReplyCommentsRef.child("comment").setValue(comment);
-        mReplyCommentsRef.child("likeCount").setValue(0);
-        mReplyCommentsRef.child("liked").setValue(false);
-        mReplyCommentsRef.child("timestamp").setValue(CommentsUtil.getCurrentTime());
-        mReplyCommentsRef.child("userIconSrc").setValue("abc");
-        mReplyCommentsRef.child("username").setValue("username");
+        mReplyCommentsRef.setValue(new CommentsDataModel("abc", "username", comment, false,  CommentsUtil.getCurrentTime(), 0));
     }
 
     public void replyCommentLikeInteraction(String replyContainerTimestamp, long replyCommentTimestamp, boolean liked, int likeCount)
@@ -61,4 +50,26 @@ public class CommentsPostDB {
         mMainCommentsRef.child("liked").setValue(liked);
         mMainCommentsRef.child("likeCount").setValue(likeCount);
     }
+
+    public void mainCommentSelected(String itemTimestamp, boolean selected)
+    {
+        mCommentsRef.child("MainComments").child(itemTimestamp).child("itemSelected").setValue(selected);
+    }
+
+    public void replyCommentSelected(String itemContainerTimestamp, String itemTimestamp, boolean selected)
+    {
+        mCommentsRef.child("ReplyComments").child(itemContainerTimestamp).child(itemTimestamp).child("itemSelected").setValue(selected);
+    }
+
+    public void removeMainComment(String itemTimestamp)
+    {
+        mCommentsRef.child("MainComments").child(itemTimestamp).removeValue();
+        mCommentsRef.child("ReplyComments").child(itemTimestamp+"R").removeValue();
+    }
+
+    public void removeReplyComment(String itemContainerTimestamp, String itemTimestamp)
+    {
+        mCommentsRef.child("ReplyComments").child(itemContainerTimestamp).child(itemTimestamp).removeValue();
+    }
+
 }

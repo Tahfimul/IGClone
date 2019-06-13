@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="wrap_content"
+                                             android:layout_height="wrap_content">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Why are you reporting this?"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:textAlignment="center"
+            android:id="@+id/title"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_below="@id/title"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="10dp"
+            android:id="@+id/above_spam_scam_btn_line"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@id/above_spam_scam_btn_line"
+            android:text="Spam or Scam"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:id="@+id/spam_scam_btn"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:layout_below="@id/spam_scam_btn"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="5dp"
+            android:id="@+id/below_spam_scam_btn_line"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@id/below_spam_scam_btn_line"
+            android:text="Abusive content"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:id="@+id/abusive_btn"/>
+
+
+
+</RelativeLayout>

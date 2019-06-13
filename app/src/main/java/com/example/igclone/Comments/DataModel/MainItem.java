@@ -5,6 +5,7 @@ import com.example.igclone.Comments.Interfaces.Main;
 public class MainItem extends ListItem implements Main {
 
     private long MainCommentTimestamp;
+    private boolean isSelected;
 
     private CommentsDataModel data;
 
@@ -38,5 +39,16 @@ public class MainItem extends ListItem implements Main {
     @Override
     public int getType() {
         return TYPE_MAIN;
+    }
+
+
+    @Override
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isSelected;
     }
 }

@@ -17,12 +17,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.example.igclone.Comments.DataModel.ListItem;
-import com.example.igclone.Comments.DataModel.MainItem;
-import com.example.igclone.Comments.DataModel.ReplyItem;
 import com.example.igclone.R;
 import com.example.igclone.Comments.Util.CommentsUtil;
-import com.example.igclone.Util.SendToUserUtil;
 
+import java.util.Arrays;
 import java.util.TreeMap;
 
 public class CommentsActivity extends AppCompatActivity implements View.OnClickListener{
@@ -55,10 +53,10 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_comments);
+        setContentView(R.layout.activity_comments);
 
         leftBtn = findViewById(R.id.left_btn);
-        leftBtn.setOnClickListener(this);
+//        leftBtn.setOnClickListener(this);
 
         mToolbar = findViewById(R.id.toolbar);
 
@@ -78,8 +76,9 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         replyIndicatorMsg = findViewById(R.id.replying_inidicator_message);
         replyIndicatorDismissBtn = findViewById(R.id.replying_indicator_dismiss_btn);
 
-        CommentsUtil.setContext(this);
+        CommentsUtil.setActivityComponents(this, getSupportFragmentManager());
         CommentsUtil.setToolbarComponents(mToolbar, leftBtn, mTitle, rightBtn);
+        CommentsUtil.showDefaultToolbar();
 
         setUpRecycler();
 
@@ -118,10 +117,12 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 //                }
 //                System.out.println("-----------------------------------------------------------------------------------------");
 
-                CommentsUtil.updateCommentsRecyclerDataset(listItems);
+                System.out.println("Received data in CommentsActivity "+ Arrays.asList(listItems).toString());
+                if (!listItems.containsKey("null"))
+                    CommentsUtil.updateCommentsRecyclerDataset(listItems);
                 replyIndicatorDismissBtn.setOnClickListener(CommentsActivity.this);
                 rightBtn.setVisibility(View.VISIBLE);
-                rightBtn.setOnClickListener(CommentsActivity.this);
+//                rightBtn.setOnClickListener(CommentsActivity.this);
                 postBtn.setOnClickListener(CommentsActivity.this);
 
             }
@@ -299,24 +300,25 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.left_btn:
-                onBackPressed();
-                break;
-            case R.id.right_btn:
-                SendToUserUtil.showSendToUserModal(getSupportFragmentManager());
-                break;
+//            case R.id.left_btn:
+//                onBackPressed();
+//                break;
+//            case R.id.right_btn:
+//                SendToUserUtil.showSendToUserModal(getSupportFragmentManager());
+//                break;
             case R.id.post_btn:
+                Toast.makeText(this, "Post Btn Clicked", Toast.LENGTH_SHORT).show();
                  String comment = commentInput.getText().toString();
                 if (!comment.isEmpty())
                 {
                     switch (curr_comment_state)
                     {
                         case CommentsActivity.MAIN_COMMENT:
-//                            System.out.println("Posting Main COmment");
+                            System.out.println("Posting Main COmment");
                             CommentsUtil.postMainComment(comment);
                             break;
                         case CommentsActivity.REPLY_COMMENT:
-//                            System.out.println("Posting Reply Comment");
+                            System.out.println("Posting Reply Comment");
                             CommentsUtil.postReplyComment(reply_container_timestamp, comment);
                             break;
                     }
@@ -373,13 +375,6 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     public void onBackPressed() {
             finish();
             super.onBackPressed();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterAllReceivers();
     }
 
     @Override

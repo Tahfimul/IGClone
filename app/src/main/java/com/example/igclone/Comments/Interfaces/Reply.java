@@ -11,4 +11,8 @@ public interface Reply {
     CommentsDataModel getReplyData();
 
     void setReplyData(CommentsDataModel replyData);
+
+    void setIsSelected(boolean isSelected);
+
+    boolean isSelected();
 }

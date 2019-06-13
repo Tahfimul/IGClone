@@ -7,7 +7,6 @@ public class CommentsDataModel {
     private boolean liked;
     private long timestamp;
     private int likeCount;
-
     public CommentsDataModel(String userIconSrc, String username, String comment, boolean liked, long timestamp, int likeCount)
     {
         this.userIconSrc = userIconSrc;

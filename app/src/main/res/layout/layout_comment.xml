@@ -22,7 +22,7 @@
             android:layout_toLeftOf="@id/like_btn"
             android:layout_gravity="center_vertical"
             android:id="@+id/comment_txt"
-            android:text="sdfsdasdasdasdasdadsdasd"
+            android:text=" "
             android:textColor="@android:color/black"
             android:textSize="15sp"
             android:paddingStart="10dp"
