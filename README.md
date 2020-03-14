@@ -1,3 +1,3 @@
 # IGClone
-# An Instagram Clone Project.
+## An Instagram Clone Project.
 # # 
