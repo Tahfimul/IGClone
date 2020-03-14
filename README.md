@@ -1,4 +1,4 @@
 # IGClone
 ## An Instagram Clone Project.
-###Functionalities:
-###&bull;
+Functionalities: <br/>
+&bull;
