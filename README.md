@@ -1,4 +1,4 @@
-# Project Moved to https://github.com/Tahfimul/ZxtDrft
+
 # IGClone
 ## An Instagram Clone Project.
 ### Functionalities: <br/>
